@@ -22,7 +22,53 @@
             background-color: var(--background); 
             color: var(--text-main);
             margin: 0; 
-            padding: 30px 20px; 
+            padding: 0; 
+        }
+
+        /* แถบเมนูด้านบนสุดเชื่อมต่อไปหน้าอื่น */
+        .navbar {
+            background-color: #0f172a;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background-color: #1e293b;
+        }
+
+        .nav-link.active {
+            color: white;
+            background-color: var(--primary);
+        }
+
+        .main-content {
+            padding: 30px 20px;
         }
 
         .main-header {
@@ -119,7 +165,6 @@
 
         button:hover { background-color: var(--primary-hover); }
 
-        /* User Profile Area Inside Dashboard */
         .profile-badge {
             display: flex;
             justify-content: space-between;
@@ -156,7 +201,6 @@
         }
 
         table { width: 100%; border-collapse: collapse; }
-        
         th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
         
         th { 
@@ -190,73 +234,83 @@
 </head>
 <body>
 
-    <div class="main-header">
-        <h1>ระบบการจัดการและนำเสนอข้อมูลยานพาหนะ</h1>
-        <p>Smart Fleet Interactive Dashboard & Data Analysis</p>
-    </div>
-    
-    <div class="container">
-        <div class="card card-left">
-            <h2>📝 บันทึกข้อมูลการวิ่งรถ</h2>
-            <form id="fleetForm">
-                <div class="form-group">
-                    <label for="carId">หมายเลขทะเบียนรถ / รหัสรถ</label>
-                    <input type="text" id="carId" required placeholder="เช่น รล-1234">
-                </div>
-                <div class="form-group">
-                    <label for="carType">ประเภทรถยนต์</label>
-                    <select id="carType">
-                        <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
-                        <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
-                        <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="distance">ระยะทางที่วิ่งได้ (กิโลเมตร)</label>
-                    <input type="number" id="distance" min="1" required placeholder="กรอกตัวเลขระยะทาง">
-                </div>
-                <div class="form-group">
-                    <label for="fuel">ปริมาณน้ำมันที่ใช้ (ลิตร)</label>
-                    <input type="number" id="fuel" min="1" required placeholder="กรอกตัวเลขจำนวนลิตร">
-                </div>
-                <button type="submit">คำนวณและบันทึกข้อมูล</button>
-            </form>
+    <nav class="navbar">
+        <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link active">แผงควบคุม (Dashboard)</a>
+            <a href="database.html" class="nav-link">คลังข้อมูลยานพาหนะ</a>
+            <a href="developer.html" class="nav-link">ข้อมูลผู้พัฒนา</a>
         </div>
+    </nav>
 
-        <div class="card">
-            <h2>📊 แผงควบคุมสรุปผลสถิติ</h2>
-            
-            <div class="profile-badge">
-                <div class="profile-info">ผู้ดูแลระบบ: วรัญญา ผาขา (รหัส 67540044)</div>
-                <div class="meta-info">ฝ่ายยานพาหนะ | Department of Highways</div>
-            </div>
-            
-            <div class="summary-box">
-                <div class="stat">
-                    จำนวนการวิ่งทั้งหมด
-                    <span id="totalTrips" class="stat-value" style="color: var(--primary);">0</span>
-                </div>
-                <div class="stat">
-                    ระยะทางสะสมรวม
-                    <span id="totalDistance" class="stat-value" style="color: var(--success);">0</span>
-                </div>
+    <div class="main-content">
+        <div class="main-header">
+            <h1>ระบบการจัดการและนำเสนอข้อมูลยานพาหนะ</h1>
+            <p>Smart Fleet Interactive Dashboard & Data Analysis</p>
+        </div>
+        
+        <div class="container">
+            <div class="card card-left">
+                <h2>📝 บันทึกข้อมูลการวิ่งรถ</h2>
+                <form id="fleetForm">
+                    <div class="form-group">
+                        <label for="carId">หมายเลขทะเบียนรถ / รหัสรถ</label>
+                        <input type="text" id="carId" required placeholder="เช่น รล-1234">
+                    </div>
+                    <div class="form-group">
+                        <label for="carType">ประเภทรถยนต์</label>
+                        <select id="carType">
+                            <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
+                            <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
+                            <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">ระยะทางที่วิ่งได้ (กิโลเมตร)</label>
+                        <input type="number" id="distance" min="1" required placeholder="กรอกตัวเลขระยะทาง">
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel">ปริมาณน้ำมันที่ใช้ (ลิตร)</label>
+                        <input type="number" id="fuel" min="1" required placeholder="กรอกตัวเลขจำนวนลิตร">
+                    </div>
+                    <button type="submit">คำนวณและบันทึกข้อมูล</button>
+                </form>
             </div>
 
-            <h3>📋 ตารางประเมินผลประสิทธิภาพน้ำมัน</h3>
-            <div class="table-responsive">
-                <table id="fleetTable">
-                    <thead>
-                        <tr>
-                            <th>รหัสรถ</th>
-                            <th>ประเภท</th>
-                            <th>ระยะทาง</th>
-                            <th>น้ำมันที่ใช้</th>
-                            <th>อัตราสิ้นเปลืองและการประเมิน</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
+            <div class="card">
+                <h2>📊 แผงควบคุมสรุปผลสถิติ</h2>
+                
+                <div class="profile-badge">
+                    <div class="profile-info">ผู้ดูแลระบบ: วรัญญา ผาขา (รหัส 67540044)</div>
+                    <div class="meta-info">ฝ่ายยานพาหนะ | Department of Highways</div>
+                </div>
+                
+                <div class="summary-box">
+                    <div class="stat">
+                        จำนวนการวิ่งทั้งหมด
+                        <span id="totalTrips" class="stat-value" style="color: var(--primary);">0 ครั้ง</span>
+                    </div>
+                    <div class="stat">
+                        ระยะทางสะสมรวม
+                        <span id="totalDistance" class="stat-value" style="color: var(--success);">0 กม.</span>
+                    </div>
+                </div>
+
+                <h3>📋 ตารางประเมินผลประสิทธิภาพน้ำมัน</h3>
+                <div class="table-responsive">
+                    <table id="fleetTable">
+                        <thead>
+                            <tr>
+                                <th>รหัสรถ</th>
+                                <th>ประเภท</th>
+                                <th>ระยะทาง</th>
+                                <th>น้ำมันที่ใช้</th>
+                                <th>อัตราสิ้นเปลืองและการประเมิน</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -272,7 +326,6 @@
             const distance = parseFloat(document.getElementById('distance').value);
             const fuel = parseFloat(document.getElementById('fuel').value);
 
-            // คำนวณอัตราสิ้นเปลืองน้ำมันแบบ Dynamic
             const consumption = (distance / fuel).toFixed(2);
             
             let statusBadge = consumption >= 10 ? 

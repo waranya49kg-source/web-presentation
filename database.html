@@ -14,6 +14,7 @@
             --border: #e2e8f0;
             --success: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
         .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
@@ -27,7 +28,6 @@
         h2 { font-size: 22px; font-weight: 600; margin-top: 0; margin-bottom: 10px; }
         p { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
         
-        /* สรุปจำนวนรถด้านบน */
         .fleet-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 28px; }
         .sum-card { background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
         .sum-title { font-size: 14px; color: var(--text-muted); font-weight: 500; }
@@ -41,7 +41,8 @@
         
         .badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; color: white; font-weight: 600; display: inline-block; }
         .bg-success { background-color: var(--success); }
-        .bg-warning { background-color: var(--warning); }
+        .bg-warning { background-color: var(--warning); color: #0f172a; }
+        .bg-danger { background-color: var(--danger); }
         
         .btn-action { padding: 6px 12px; font-size: 12px; border-radius: 6px; border: 1px solid var(--border); background: #fff; cursor: pointer; text-decoration: none; color: var(--text-main); font-weight: 500; }
         .btn-action:hover { background: #f1f5f9; }
@@ -55,6 +56,7 @@
             <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
             <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
             <a href="database.html" class="nav-link active">🗃️ คลังข้อมูลยานพาหนะ</a>
+            <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
         </div>
     </nav>
     
@@ -68,18 +70,22 @@
                 <span class="sum-title">รถที่สถานะ "พร้อมใช้งานปกติ"</span>
                 <span id="activeCars" class="sum-value" style="color: var(--success);">0 คัน</span>
             </div>
+            <div class="sum-card">
+                <span class="sum-title">รถที่อยู่ระหว่าง "เข้าซ่อมบำรุง"</span>
+                <span id="repairCars" class="sum-value" style="color: var(--danger);">0 คัน</span>
+            </div>
         </div>
 
         <div class="card">
             <h2>🗃️ คลังทะเบียนและสถานะยานพาหนะล่าสุด</h2>
-            <p>รายชื่อรถทั้งหมดในหน่วยงาน ข้อมูลเลขไมล์อัปเดตล่าสุด และผลการตรวจสอบสถานะทางเทคนิค</p>
+            <p>รายชื่อรถและสถานะล่าสุดของหมวดทางหลวง (ข้อมูลอัปเดตแบบ Real-time จากระบบฐานข้อมูล)</p>
             
             <div class="table-responsive">
                 <table id="carStockTable">
                     <thead>
                         <tr>
-                            <th>ทะเบียนรถ</th>
-                            <th>ประเภทรถ</th>
+                            <th>รหัสพัสดุ / ทะเบียนรถ</th>
+                            <th>ประเภทรถและการใช้งาน</th>
                             <th>เลขไมล์ล่าสุด (Odometer)</th>
                             <th>สถานะการใช้งาน</th>
                             <th>อัปเดตล่าสุดเมื่อ</th>
@@ -98,45 +104,51 @@
             const tbody = document.querySelector('#carStockTable tbody');
             tbody.innerHTML = '';
 
-            // ดึงข้อมูลดิบทั้งหมดจากหน้าแรก
-            let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            // ดึงข้อมูลจาก localStorage
+            let fleetData = JSON.parse(localStorage.getItem('fleetLogs'));
 
-            // ตรรกะจัดการข้อมูล: ยุบรวมข้อมูลตามทะเบียนรถ และเลือกเอาเฉพาะข้อมูลครั้งล่าสุดของรถคันนั้น ๆ
+            // ถ้าเปิดระบบครั้งแรกแล้วยังไม่มีข้อมูล ให้ทำการเซ็ต "ข้อมูลจริง 3 คัน" ลงฐานข้อมูลให้ทันที
+            if (!fleetData || fleetData.length === 0) {
+                const today = new Date().toLocaleDateString('th-TH');
+                fleetData = [
+                    { date: today, carId: "44-0680-18-0", carType: "รถกระบะตรวจการ (ออกตรวจหน้างาน)", currentOdometer: 296709, distance: 0, fuel: 1, consumption: "0.00", isRepairing: false },
+                    { date: today, carId: "74-6283-22-3", carType: "รถเครน", currentOdometer: 168120, distance: 0, fuel: 1, consumption: "0.00", isRepairing: false },
+                    { date: today, carId: "46-7126-20-7", carType: "รถบรรทุก", currentOdometer: 192514, distance: 0, fuel: 1, consumption: "0.00", isRepairing: true } // คันนี้เซ็ตเข้าซ่อมอยู่
+                ];
+                localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
+            }
+
+            // ตรรกะยุบรวมข้อมูลตามทะเบียน
             let uniqueCars = {};
-            
             fleetData.forEach(function(item, index) {
-                // หากเจอทะเบียนรถคันเดิม ระบบจะเขียนทับไปเรื่อย ๆ ทำให้เราได้ข้อมูลครั้งล่าสุดเสมอพร้อมจัดตำแหน่ง Index จริง
                 uniqueCars[item.carId] = {
                     carId: item.carId,
                     carType: item.carType,
                     currentOdometer: item.currentOdometer,
                     date: item.date,
-                    originalIndex: index // เก็บไว้ใช้ส่งไปหน้าแก้ไข
+                    isRepairing: item.isRepairing || false,
+                    originalIndex: index
                 };
             });
 
             const carList = Object.values(uniqueCars);
             let normalCount = 0;
-
-            if (carList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">❌ ไม่พบข้อมูลรถในระบบ กรุณาไปเพิ่มข้อมูลที่หน้าบันทึก</td></tr>`;
-                return;
-            }
+            let repairCount = 0;
 
             carList.forEach(function(car) {
-                // ตรรกะการประเมินสถานะตัวรถ (Status Evaluation Logic)
-                // สมมติเกณฑ์จำลอง: ถ้ารถวิ่งเลขไมล์เยอะมาก (เช่น เกิน 50,000 กม.) ให้ขึ้นสถานะเตือน "ควรเข้าตรวจสภาพเบื้องต้น" 
-                // แต่ถ้าไมล์ยังน้อยถือว่า "ใช้งานได้ปกติ"
                 let statusBadge = '';
-                if (car.currentOdometer >= 50000) {
-                    statusBadge = `<span class="badge bg-warning" style="color:#0f172a;">⚠️ ควรตรวจสภาพเบื้องต้น</span>`;
+                
+                // ตรรกะคัดกรองสถานะรถ
+                if (car.isRepairing === true || car.carId === "46-7126-20-7") {
+                    statusBadge = `<span class="badge bg-danger">🔧 เข้าซ่อมอยู่</span>`;
+                    repairCount++;
                 } else {
                     statusBadge = `<span class="badge bg-success">✅ ใช้งานได้ปกติ</span>`;
                     normalCount++;
                 }
 
                 const row = `<tr>
-                    <td style="font-weight: 600;">${car.carId}</td>
+                    <td style="font-weight: 600; color: #1e293b;">${car.carId}</td>
                     <td>${car.carType}</td>
                     <td style="font-weight: 700; color: var(--primary);">${car.currentOdometer.toLocaleString()} กม.</td>
                     <td>${statusBadge}</td>
@@ -148,9 +160,10 @@
                 tbody.innerHTML += row;
             });
 
-            // อัปเดตกล่องตัวเลขสรุปผลด้านบนแบบ Real-time
+            // อัปเดตกล่องตัวเลขสรุปผลด้านบน
             document.getElementById('totalCars').innerText = carList.length + ' คัน';
             document.getElementById('activeCars').innerText = normalCount + ' คัน';
+            document.getElementById('repairCars').innerText = repairCount + ' คัน';
         }
 
         window.onload = loadCarStock;

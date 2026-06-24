@@ -21,20 +21,20 @@
         .nav-link:hover { color: white; background-color: #1e293b; }
         .nav-link.active { color: white; background-color: var(--primary); }
         
-        .main-container { max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        .main-container { max-width: 650px; margin: 50px auto; padding: 0 20px; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
         
         .profile-img { width: 130px; height: 130px; border-radius: 50%; background-color: #e2e8f0; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 4px solid var(--border); }
         
         h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; }
-        .subtitle { color: var(--primary); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+        .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
         
         .info-grid { border-top: 1px solid var(--border); padding-top: 24px; text-align: left; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 14px; }
-        .info-label { color: var(--text-muted); font-weight: 500; }
+        .info-row { display: flex; flex-direction: column; margin-bottom: 16px; font-size: 14px; line-height: 1.6; }
+        .info-label { color: var(--text-muted); font-weight: 600; font-size: 13px; margin-bottom: 2px; }
         .info-value { font-weight: 600; color: var(--text-main); }
         
-        .tech-stack { margin-top: 24px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .tech-stack { margin-top: 28px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 20px; }
         .tech-badge { background-color: #f1f5f9; color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
     </style>
 </head>
@@ -54,21 +54,25 @@
         <div class="card">
             <div class="profile-img">👩‍💻</div>
             
-            <h2>วรัญญา ภาคา</h2>
-            <div class="subtitle">Digital HR Student & Developer</div>
+            <h2>วรัญญา ภาคะ</h2>
+            <div class="subtitle">HR Tech Student & Front-end Developer</div>
             
             <div class="info-grid">
                 <div class="info-row">
-                    <span class="info-label">รหัสนักศึกษา:</span>
+                    <span class="info-label">รหัสนักศึกษา</span>
                     <span class="info-value">67540044</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">สาขาวิชา:</span>
-                    <span class="info-value">การบริหารทรัพยากรมนุษย์ดิจิทัล (Digital HR)</span>
+                    <span class="info-label">สาขาวิชา</span>
+                    <span class="info-value">เทคโนโลยีดิจิทัลเพื่อการฝึกอบรมทรัพยากรมนุษย์ในองค์กร</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">บทบาทในโครงการ:</span>
-                    <span class="info-value">Front-end Developer & Data Analyst</span>
+                    <span class="info-label">รายวิชา</span>
+                    <span class="info-value" style="color: #1e293b; font-weight: 500;">Web Technologies and Platforms for Corporate communications and Human Resources Development in Organization</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">บทบาทในโครงการ</span>
+                    <span class="info-value">Front-end Developer & Data Systems Analyst</span>
                 </div>
             </div>
             
@@ -76,7 +80,7 @@
                 <span class="tech-badge">HTML5</span>
                 <span class="tech-badge">CSS3</span>
                 <span class="tech-badge">JavaScript (ES6)</span>
-                <span class="tech-badge">Local Storage</span>
+                <span class="tech-badge">Local Storage Data</span>
             </div>
         </div>
     </div>

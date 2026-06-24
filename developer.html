@@ -3,21 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ข้อมูลผู้พัฒนา - Smart Fleet</title>
+    <title>Smart Fleet - ผู้พัฒนาระบบ</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #0f172a; margin: 0; padding: 0; }
+        :root {
+            --primary: #4f46e5;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
         .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
         .navbar-brand { font-size: 18px; font-weight: 700; }
-        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 14px; }
-        .nav-links a:hover, .nav-links a.active { color: white; }
-        .main-container { max-width: 600px; margin: 60px auto; padding: 0 20px; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid #e2e8f0; text-align: center; }
-        .avatar { width: 100px; height: 100px; border-radius: 50%; background-color: #e2e8f0; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 40px; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h2 { font-size: 24px; font-weight: 600; margin-bottom: 5px; }
-        .subtitle { color: #4f46e5; font-weight: 600; margin-top: 0; margin-bottom: 24px; font-size: 15px; }
-        hr { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
-        .info-list { text-align: left; line-height: 1.8; color: #334155; font-size: 14px; }
-        .info-list strong { color: #0f172a; display: inline-block; width: 100px; }
+        .nav-links { display: flex; gap: 10px; }
+        .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; }
+        .nav-link:hover { color: white; background-color: #1e293b; }
+        .nav-link.active { color: white; background-color: var(--primary); }
+        
+        .main-container { max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
+        
+        .profile-img { width: 130px; height: 130px; border-radius: 50%; background-color: #e2e8f0; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 4px solid var(--border); }
+        
+        h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; }
+        .subtitle { color: var(--primary); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+        
+        .info-grid { border-top: 1px solid var(--border); padding-top: 24px; text-align: left; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 14px; }
+        .info-label { color: var(--text-muted); font-weight: 500; }
+        .info-value { font-weight: 600; color: var(--text-main); }
+        
+        .tech-stack { margin-top: 24px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+        .tech-badge { background-color: #f1f5f9; color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -25,22 +43,40 @@
     <nav class="navbar">
         <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
         <div class="nav-links">
-            <a href="index.html">แผงควบคุม (Dashboard)</a>
-            <a href="database.html">คลังข้อมูลยานพาหนะ</a>
-            <a href="developer.html" class="active">ข้อมูลผู้พัฒนา</a>
+            <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
+            <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
+            <a href="database.html" class="nav-link">🗃️ คลังข้อมูลยานพาหนะ</a>
+            <a href="developer.html" class="nav-link active">🧑‍💻 ผู้พัฒนาระบบ</a>
         </div>
     </nav>
     
     <div class="main-container">
         <div class="card">
-            <div class="avatar">👩‍💻</div>
-            <h2>วรัญญา ภาคะ</h2>
-            <div class="subtitle">รหัสนักศึกษา 67540044</div>
-            <hr>
-            <div class="info-list">
-                <p><strong>สาขาวิชา:</strong> Digital HR</p>
-                <p><strong>โครงงานวิชา:</strong> Web Technologies and Platforms for Corporate communications and Human Resources Development in Organization</p>
-                <p><strong>กรณีศึกษา:</strong> ระบบจัดการข้อมูลและวิเคราะห์อัตราสิ้นเปลืองน้ำมัน ยานพาหนะแขวงทางหลวงชลบุรีที่ 2 </p>
+            <div class="profile-img">👩‍💻</div>
+            
+            <h2>วรัญญา ภาคา</h2>
+            <div class="subtitle">Digital HR Student & Developer</div>
+            
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="info-label">รหัสนักศึกษา:</span>
+                    <span class="info-value">67540044</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">สาขาวิชา:</span>
+                    <span class="info-value">การบริหารทรัพยากรมนุษย์ดิจิทัล (Digital HR)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">บทบาทในโครงการ:</span>
+                    <span class="info-value">Front-end Developer & Data Analyst</span>
+                </div>
+            </div>
+            
+            <div class="tech-stack">
+                <span class="tech-badge">HTML5</span>
+                <span class="tech-badge">CSS3</span>
+                <span class="tech-badge">JavaScript (ES6)</span>
+                <span class="tech-badge">Local Storage</span>
             </div>
         </div>
     </div>

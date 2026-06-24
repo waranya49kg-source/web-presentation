@@ -21,16 +21,31 @@
         .nav-link:hover { color: white; background-color: #1e293b; }
         .nav-link.active { color: white; background-color: var(--primary); }
         
-        .main-container { max-width: 650px; margin: 50px auto; padding: 0 20px; }
+        /* ขยับโครงสร้าง container ให้อยู่กึ่งกลางหน้าจออย่างสมบูรณ์ */
+        .main-container { 
+            max-width: 650px; 
+            margin: 50px auto; 
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+        }
         
-        /* ปรับ padding ของการ์ดเพิ่มขึ้นเพื่อไม่ให้ชิดขอบด้านบนเกินไป */
-        .card { background: white; padding: 50px 40px 40px 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
+        /* จัดขนาดการ์ดและให้ข้อมูลทุกอย่าง Align ตรงกลาง */
+        .card { 
+            background: white; 
+            padding: 50px 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05); 
+            border: 1px solid var(--border); 
+            text-align: center;
+            width: 100%;
+        }
         
-        /* แก้ไขปัญหาการทับซ้อนและจัดระเบียบโครงสร้างรูปภาพ */
+        /* จัดตำแหน่งบล็อกรูปภาพให้อยู่กึ่งกลางเป๊ะ ไม่เบี้ยวซ้าย */
         .profile-container {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 24px auto; /* เว้นระยะห่างด้านล่างไม่ให้ข้อความดันขึ้นมาทับ */
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 24px auto; /* auto ซ้ายขวา ช่วยดันให้อยู่ตรงกลาง */
             position: relative;
         }
         .profile-img { 
@@ -40,19 +55,19 @@
             border: 4px solid var(--border);
             object-fit: cover;
             display: block;
-            background-color: #e2e8f0; /* สีกำลังโหลดหรือพื้นหลังกรณีไม่มีรูป */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         
-        h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; }
-        .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
+        h2 { font-size: 26px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.4; color: var(--text-main); }
+        .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; }
         
         .info-grid { border-top: 1px solid var(--border); padding-top: 24px; text-align: left; }
-        .info-row { display: flex; flex-direction: column; margin-bottom: 16px; font-size: 14px; line-height: 1.6; }
-        .info-label { color: var(--text-muted); font-weight: 600; font-size: 13px; margin-bottom: 2px; }
-        .info-value { font-weight: 600; color: var(--text-main); }
+        .info-row { display: flex; flex-direction: column; margin-bottom: 18px; font-size: 14px; line-height: 1.6; }
+        .info-label { color: var(--text-muted); font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+        .info-value { font-weight: 600; color: var(--text-main); font-size: 15px; }
         
-        .tech-stack { margin-top: 28px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 20px; }
-        .tech-badge { background-color: #f1f5f9; color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
+        .tech-stack { margin-top: 28px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 24px; }
+        .tech-badge { background-color: #f1f5f9; color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
@@ -71,7 +86,7 @@
         <div class="card">
             
             <div class="profile-container">
-                <img src="profile.jpg" alt="วรัญญา ภาคะ" class="profile-img">
+                <img src="image_8ab961.png" alt="วรัญญา ภาคะ" class="profile-img">
             </div>
             
             <h2>วรัญญา ภาคะ</h2>
@@ -88,7 +103,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">รายวิชา</span>
-                    <span class="info-value" style="color: #1e293b; font-weight: 500;">Web Technologies and Platforms for Corporate communications and Human Resources Development in Organization</span>
+                    <span class="info-value" style="color: #1e293b; font-weight: 500; font-size: 14.5px;">Web Technologies and Platforms for Corporate communications and Human Resources Development in Organization</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">บทบาทในโครงการ</span>

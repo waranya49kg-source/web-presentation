@@ -15,6 +15,8 @@
             --border: #e2e8f0;
             --success: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
         }
 
         body { 
@@ -25,7 +27,6 @@
             padding: 0; 
         }
 
-        /* แถบเมนูด้านบนสุดเชื่อมต่อไปหน้าอื่น */
         .navbar {
             background-color: #0f172a;
             padding: 15px 30px;
@@ -36,17 +37,9 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .navbar-brand {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 10px;
-        }
-
+        .navbar-brand { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+        .nav-links { display: flex; gap: 10px; }
+        
         .nav-link {
             color: #94a3b8;
             text-decoration: none;
@@ -57,37 +50,12 @@
             transition: all 0.2s;
         }
 
-        .nav-link:hover {
-            color: white;
-            background-color: #1e293b;
-        }
-
-        .nav-link.active {
-            color: white;
-            background-color: var(--primary);
-        }
-
-        .main-content {
-            padding: 30px 20px;
-        }
-
-        .main-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .main-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 0 0 8px 0;
-        }
-
-        .main-header p {
-            color: var(--text-muted);
-            margin: 0;
-            font-size: 15px;
-        }
+        .nav-link:hover { color: white; background-color: #1e293b; }
+        .nav-link.active { color: white; background-color: var(--primary); }
+        .main-content { padding: 30px 20px; }
+        .main-header { text-align: center; margin-bottom: 40px; }
+        .main-header h1 { font-size: 28px; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0; }
+        .main-header p { color: var(--text-muted); margin: 0; font-size: 15px; }
 
         .container { 
             display: flex; 
@@ -106,9 +74,7 @@
             flex: 1; 
         }
 
-        .card-left {
-            max-width: 400px;
-        }
+        .card-left { max-width: 400px; }
 
         h2 { 
             font-size: 20px;
@@ -122,14 +88,7 @@
         }
 
         .form-group { margin-bottom: 20px; }
-        
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            font-weight: 500; 
-            font-size: 14px;
-            color: var(--text-main); 
-        }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-main); }
 
         input, select { 
             width: 100%; 
@@ -150,7 +109,6 @@
         }
 
         button { 
-            background-color: var(--primary); 
             color: white; 
             border: none; 
             padding: 14px; 
@@ -159,11 +117,31 @@
             width: 100%; 
             font-size: 15px; 
             font-weight: 600; 
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             margin-top: 10px;
         }
 
-        button:hover { background-color: var(--primary-hover); }
+        .btn-submit { background-color: var(--primary); }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        
+        /* สไตล์ปุ่มตอนกำลังแก้ไขข้อมูล */
+        .btn-update { background-color: var(--warning); color: #0f172a; }
+        .btn-update:hover { background-color: #d97706; }
+
+        /* ปุ่มขนาดเล็กในตาราง */
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            width: auto;
+            margin-top: 0;
+            margin-right: 5px;
+            display: inline-block;
+        }
+        .btn-edit { background-color: #e2e8f0; color: var(--text-main); }
+        .btn-edit:hover { background-color: #cbd5e1; }
+        .btn-delete { background-color: var(--danger); }
+        .btn-delete:hover { background-color: var(--danger-hover); }
 
         .profile-badge {
             display: flex;
@@ -194,12 +172,7 @@
         .stat-value { display: block; font-size: 24px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
 
         h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
+        .table-responsive { width: 100%; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
         
@@ -211,8 +184,6 @@
         }
 
         td { border-bottom: 1px solid var(--border); color: #334155; }
-        
-        tr:last-child td { border-bottom: none; }
         tr:hover td { background-color: #f8fafc; }
 
         .badge { 
@@ -251,7 +222,7 @@
         
         <div class="container">
             <div class="card card-left">
-                <h2>📝 บันทึกข้อมูลการวิ่งรถ</h2>
+                <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถ</h2>
                 <form id="fleetForm">
                     <div class="form-group">
                         <label for="carId">หมายเลขทะเบียนรถ / รหัสรถ</label>
@@ -273,7 +244,7 @@
                         <label for="fuel">ปริมาณน้ำมันที่ใช้ (ลิตร)</label>
                         <input type="number" id="fuel" min="1" required placeholder="กรอกตัวเลขจำนวนลิตร">
                     </div>
-                    <button type="submit">คำนวณและบันทึกข้อมูล</button>
+                    <button type="submit" id="submitBtn" class="btn-submit">คำนวณและบันทึกข้อมูล</button>
                 </form>
             </div>
 
@@ -281,7 +252,7 @@
                 <h2>📊 แผงควบคุมสรุปผลสถิติ</h2>
                 
                 <div class="profile-badge">
-                    <div class="profile-info">ผู้ดูแลระบบ: วรัญญา ภาคะ</div>
+                    <div class="profile-info">ผู้ดูแลระบบ: วรัญญา ผาขา (รหัส 67540044)</div>
                     <div class="meta-info">ฝ่ายยานพาหนะ | Department of Highways</div>
                 </div>
                 
@@ -305,7 +276,8 @@
                                 <th>ประเภท</th>
                                 <th>ระยะทาง</th>
                                 <th>น้ำมันที่ใช้</th>
-                                <th>อัตราสิ้นเปลืองและการประเมิน</th>
+                                <th>การประเมิน</th>
+                                <th>จัดการข้อมูล</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -317,6 +289,7 @@
 
     <script>
         let fleetData = [];
+        let editIndex = -1; // -1 แปลว่าโหมดปกติ (บันทึกใหม่), ถ้า >= 0 แปลว่ากำลังแก้ไขตัวดัชนีนั้นอยู่
 
         document.getElementById('fleetForm').addEventListener('submit', function(event) {
             event.preventDefault(); 
@@ -332,11 +305,60 @@
                 `<span class="badge bg-success">${consumption} กม./ลิตร (ประหยัด)</span>` : 
                 `<span class="badge bg-warning">${consumption} กม./ลิตร (กินน้ำมัน)</span>`;
 
-            fleetData.push({ carId, carType, distance, fuel, statusBadge });
+            // ดำเนินการตามโหมดปัจจุบัน
+            if (editIndex === -1) {
+                // โหมดปกติ: เพิ่มข้อมูลใหม่ลง Array
+                fleetData.push({ carId, carType, distance, fuel, statusBadge });
+            } else {
+                // โหมดแก้ไข: อัปเดตทับข้อมูลเดิมที่เลือก
+                fleetData[editIndex] = { carId, carType, distance, fuel, statusBadge };
+                resetFormMode(); // บันทึกเสร็จแล้วให้ล้างสถานะกลับไปโหมดปกติ
+            }
 
             refreshDashboard();
-            document.getElementById('fleetForm').reset();
         });
+
+        // ฟังก์ชันล้างฟอร์มและรีเซ็ตกลับเข้าสู่โหมดบันทึกข้อมูลปกติ
+        function resetFormMode() {
+            editIndex = -1;
+            document.getElementById('fleetForm').reset();
+            document.getElementById('formTitle').innerText = "📝 บันทึกข้อมูลการวิ่งรถ";
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "คำนวณและบันทึกข้อมูล";
+            submitBtn.className = "btn-submit";
+        }
+
+        // ฟังก์ชันดึงข้อมูลในแถวกลับขึ้นไปบนฟอร์มเพื่อแก้ไข
+        function editRow(index) {
+            editIndex = index;
+            const item = fleetData[index];
+
+            // ดึงค่าเก่าไปแปะในอินพุต
+            document.getElementById('carId').value = item.carId;
+            document.getElementById('carType').value = item.carType;
+            document.getElementById('distance').value = item.distance;
+            document.getElementById('fuel').value = item.fuel;
+
+            // เปลี่ยนดีไซน์ของหัวข้อฟอร์มและปุ่มกดเพื่อแจ้งเตือนผู้ใช้ว่าอยู่ในโหมดแก้ไข
+            document.getElementById('formTitle').innerText = "✏️ กำลังแก้ไขข้อมูลรถ " + item.carId;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "อัปเดตการแก้ไขข้อมูล";
+            submitBtn.className = "btn-update";
+            
+            // สโครลหน้าจอขึ้นไปที่ฟอร์มเพื่อให้ใช้งานง่ายบนมือถือ
+            document.getElementById('fleetForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ฟังก์ชันลบข้อมูลออกจาก Array
+        function deleteRow(index) {
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลแถวนี้?")) {
+                fleetData.splice(index, 1);
+                if(editIndex === index) { resetFormMode(); } // ถ้าลบแถวที่กำลังเปิดแก้ค้างอยู่ ให้รีเซ็ตฟอร์มด้วย
+                refreshDashboard();
+            }
+        }
 
         function refreshDashboard() {
             const tbody = document.querySelector('#fleetTable tbody');
@@ -344,13 +366,17 @@
 
             let sumDistance = 0;
 
-            fleetData.forEach(function(item) {
+            fleetData.forEach(function(item, index) {
                 const row = `<tr>
                     <td style="font-weight: 600;">${item.carId}</td>
                     <td>${item.carType}</td>
                     <td>${item.distance.toLocaleString()} กม.</td>
                     <td>${item.fuel.toLocaleString()} ลิตร</td>
                     <td>${item.statusBadge}</td>
+                    <td>
+                        <button onclick="editRow(${index})" class="btn-sm btn-edit">แก้ไข</button>
+                        <button onclick="deleteRow(${index})" class="btn-sm btn-delete">ลบ</button>
+                    </td>
                 </tr>`;
                 tbody.innerHTML += row;
                 sumDistance += item.distance;

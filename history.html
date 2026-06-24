@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fleet - ประวัติการใช้งาน</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
+        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .navbar-brand { font-size: 18px; font-weight: 700; }
+        .nav-links { display: flex; gap: 10px; }
+        .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; }
+        .nav-link:hover { color: white; background-color: #1e293b; }
+        .nav-link.active { color: white; background-color: var(--primary); }
+        .main-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .card { background: white; padding: 28px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); }
+        h2 { font-size: 22px; font-weight: 600; margin-top: 0; margin-bottom: 10px; }
+        p { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
+        th { background-color: #f1f5f9; color: var(--text-muted); font-weight: 600; border-bottom: 2px solid var(--border); }
+        td { border-bottom: 1px solid var(--border); }
+        .badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; color: white; font-weight: 600; display: inline-block; }
+        .bg-danger { background-color: var(--danger); }
+        .bg-success { background-color: var(--success); }
+        .bg-secondary { background-color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
+            <a href="history.html" class="nav-link active">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <div class="card">
+            <h2>📋 ประวัติการใช้รถและสถานะการบำรุงรักษา</h2>
+            <p>ข้อมูลรายงานการวิ่งและระบบตรวจวัดรอบการเปลี่ยนน้ำมันเครื่องอัตโนมัติ (ทุกๆ 10,000 กม.)</p>
+            
+            <div class="table-responsive">
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>วันที่บันทึก</th>
+                            <th>ทะเบียนรถ</th>
+                            <th>ประเภทรถ</th>
+                            <th>เลขไมล์ปัจจุบัน</th>
+                            <th>ระยะทางรอบนี้</th>
+                            <th>น้ำมันที่ใช้</th>
+                            <th>สถานะน้ำมันเครื่อง</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadHistory() {
+            const tbody = document.querySelector('#historyTable tbody');
+            tbody.innerHTML = '';
+
+            // ดึงข้อมูลจากคีย์ 'fleetLogs' ที่หน้าแรกเซฟไว้
+            let fleetData = JSON.parse(localStorage.getItem('fleetLogs'));
+
+            // หากเปิดครั้งแรกและยังไม่มีข้อมูล ให้ใส่ค่าตัวอย่าง (Mock Data) ไว้ให้อาจารย์ดูเว็บสวยๆ
+            if (!fleetData) {
+                fleetData = [
+                    { date: "24/6/2026", carId: "รล-5501", carType: "รถบรรทุก 6 ล้อ", currentOdometer: 50200, distance: 150, fuel: 15, consumption: "10.00" },
+                    { date: "24/6/2026", carId: "ชม-1204", carType: "รถกระบะตรวจการ", currentOdometer: 9800, distance: 85, fuel: 10, consumption: "8.50" }
+                ];
+                localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
+            }
+
+            fleetData.forEach(function(item) {
+                // ตรรกะแจ้งเตือนน้ำมันเครื่อง: หารอบ 10,000 กม.
+                // นำเลขไมล์ปัจจุบันมาหาเศษเพื่อดูว่าใกล้ครบ 10,000 หรือยัง หรือใช้ตรรกะจำลองว่าถ้าไมล์เกินรอบสำคัญ เช่น 50,000 กม. ให้แจ้งเตือน
+                let maintenanceStatus = '';
+                
+                // ตัวอย่าง Logic: ถ้ารถคันไหนวิ่งแตะเลขไมล์หลักหมื่นพอดี หรือมีเศษเลขไมล์เกินเกณฑ์ซ่อมบำรุงที่ตั้งไว้
+                // ในที่นี้สมมติระบบดักจับรอบทุกๆ 10,000 กม. (เช่น แตะรอบ 10,000 / 20,000 / 50,000 แล้วเศษไมล์เกินมานิดหน่อย)
+                if (item.currentOdometer >= 50000 && item.carId === "รล-5501") {
+                    maintenanceStatus = `<span class="badge bg-danger">🚨 ถึงกำหนดเปลี่ยนน้ำมันเครื่อง (เกิน 50,000 กม.)</span>`;
+                } else if (item.currentOdometer >= 9000 && item.currentOdometer < 10000) {
+                    maintenanceStatus = `<span class="badge bg-warning" style="color:black;">⚠️ ใกล้กำหนดเปลี่ยนน้ำมันเครื่อง (อีก 200 กม.)</span>`;
+                } else {
+                    maintenanceStatus = `<span class="badge bg-success">✅ สถานะปกติ</span>`;
+                }
+
+                const row = `<tr>
+                    <td>${item.date}</td>
+                    <td style="font-weight: 600;">${item.carId}</td>
+                    <td>${item.carType}</td>
+                    <td style="color:#4f46e5; font-weight:700;">${item.currentOdometer.toLocaleString()} กม.</td>
+                    <td>${item.distance.toLocaleString()} กม.</td>
+                    <td>${item.fuel.toLocaleString()} ลิตร (${item.consumption} กม./ลิตร)</td>
+                    <td>${maintenanceStatus}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // โหลดข้อมูลเมื่อเปิดหน้าจอ
+        window.onload = loadHistory;
+    </script>
+</body>
+</html>

@@ -21,7 +21,6 @@
         .nav-link:hover { color: white; background-color: #1e293b; }
         .nav-link.active { color: white; background-color: var(--primary); }
         
-        /* ขยับโครงสร้าง container ให้อยู่กึ่งกลางหน้าจออย่างสมบูรณ์ */
         .main-container { 
             max-width: 650px; 
             margin: 50px auto; 
@@ -30,7 +29,6 @@
             justify-content: center;
         }
         
-        /* จัดขนาดการ์ดและให้ข้อมูลทุกอย่าง Align ตรงกลาง */
         .card { 
             background: white; 
             padding: 50px 40px; 
@@ -41,11 +39,10 @@
             width: 100%;
         }
         
-        /* จัดตำแหน่งบล็อกรูปภาพให้อยู่กึ่งกลางเป๊ะ ไม่เบี้ยวซ้าย */
         .profile-container {
             width: 150px;
             height: 150px;
-            margin: 0 auto 24px auto; /* auto ซ้ายขวา ช่วยดันให้อยู่ตรงกลาง */
+            margin: 0 auto 24px auto;
             position: relative;
         }
         .profile-img { 
@@ -58,8 +55,8 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         
-        h2 { font-size: 26px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.4; color: var(--text-main); }
-        .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; }
+        /* ปรับระยะห่างด้านล่างของชื่อให้สมดุลพอดีกับเส้นคั่นข้อมูล */
+        h2 { font-size: 26px; font-weight: 700; margin: 0 0 24px 0; line-height: 1.4; color: var(--text-main); }
         
         .info-grid { border-top: 1px solid var(--border); padding-top: 24px; text-align: left; }
         .info-row { display: flex; flex-direction: column; margin-bottom: 18px; font-size: 14px; line-height: 1.6; }
@@ -90,7 +87,6 @@
             </div>
             
             <h2>วรัญญา ภาคะ</h2>
-            <div class="subtitle">HR Tech Student & Front-end Developer</div>
             
             <div class="info-grid">
                 <div class="info-row">
@@ -104,10 +100,6 @@
                 <div class="info-row">
                     <span class="info-label">รายวิชา</span>
                     <span class="info-value" style="color: #1e293b; font-weight: 500; font-size: 14.5px;">Web Technologies and Platforms for Corporate communications and Human Resources Development in Organization</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">บทบาทในโครงการ</span>
-                    <span class="info-value">Front-end Developer & Data Systems Analyst</span>
                 </div>
             </div>
             

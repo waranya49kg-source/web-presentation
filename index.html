@@ -61,7 +61,9 @@
             <form id="fleetForm">
                 <div class="form-group">
                     <label for="carId">รหัสพัสดุ / หมายเลขทะเบียนรถ</label>
-                    <input type="text" id="carId" required placeholder="เช่น 44-0680-18-0">
+                    <input type="text" id="carId" list="carIdList" required placeholder="พิมพ์เอง หรือเลือกจากรายการที่มี">
+                    <datalist id="carIdList">
+                        </datalist>
                     <span id="mileHint" class="hint-text"></span>
                 </div>
                 <div class="form-group">
@@ -93,6 +95,9 @@
         let editIndex = -1;
 
         window.onload = function() {
+            // โหลดรายการทะเบียนรถทั้งหมดที่เคยบันทึกไว้มาใส่ลงใน Dropdown datalist
+            updateCarIdDatalist();
+
             const urlParams = new URLSearchParams(window.location.search);
             const editId = urlParams.get('edit');
             
@@ -116,6 +121,23 @@
             }
         };
 
+        // ฟังก์ชันดึงทะเบียนรถที่ไม่ซ้ำกันมาทำตัวเลือก Dropdown
+        function updateCarIdDatalist() {
+            const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            const datalist = document.getElementById('carIdList');
+            datalist.innerHTML = ""; // เคลียร์ตัวเลือกเก่า
+            
+            // ดึงเฉพาะรหัส carId ที่ไม่ซ้ำกันออกมารวมเป็นก้อนเดียว
+            const uniqueCarIds = [...new Set(fleetData.map(item => item.carId))];
+            
+            // นำรหัสรถแต่ละคันมาสร้างเป็นตัวเลือก <option>
+            uniqueCarIds.forEach(carId => {
+                const option = document.createElement('option');
+                option.value = carId;
+                datalist.appendChild(option);
+            });
+        }
+
         document.getElementById('carId').addEventListener('input', function() {
             if (editIndex !== -1) return;
             
@@ -126,6 +148,11 @@
             
             if (lastRecord) {
                 hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุดของคันนี้: ไมล์อยู่ที่ ${lastRecord.currentOdometer.toLocaleString()} กม.`;
+                
+                // ช่วยอำนวยความสะดวก: หากมีประวัติเดิม ให้ช่วยเลือกประเภทรถให้ตรงตามครั้งล่าสุดโดยอัตโนมัติ
+                if(document.getElementById('carType').value !== lastRecord.carType){
+                    document.getElementById('carType').value = lastRecord.carType;
+                }
             } else {
                 hintSpan.innerText = "";
             }
@@ -156,6 +183,9 @@
             alertBox.style.display = 'block';
             document.getElementById('fleetForm').reset();
             document.getElementById('mileHint').innerText = "";
+            
+            // อัปเดตตัวเลือกใน Dropdown ทันทีเมื่อบันทึกคันใหม่สำเร็จ
+            updateCarIdDatalist();
             
             if (editIndex !== -1) {
                 setTimeout(() => { window.location.href = 'history.html'; }, 1500);

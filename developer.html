@@ -24,7 +24,16 @@
         .main-container { max-width: 650px; margin: 50px auto; padding: 0 20px; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
         
-        .profile-img { width: 130px; height: 130px; border-radius: 50%; background-color: #e2e8f0; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 48px; border: 4px solid var(--border); }
+        /* CSS ปรับแต่งรูปภาพโปรไฟล์ให้เป็นทรงกลมสวยงาม */
+        .profile-img { 
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; 
+            margin: 0 auto 20px; 
+            border: 4px solid var(--border);
+            object-fit: cover; /* ป้องกันไม่ให้รูปภาพเบี้ยวหรือยืด */
+            display: block;
+        }
         
         h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; }
         .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
@@ -52,7 +61,8 @@
     
     <div class="main-container">
         <div class="card">
-            <div class="profile-img">👩‍💻</div>
+            
+            <img src="profile.jpg" alt="วรัญญา ภาคะ" class="profile-img">
             
             <h2>วรัญญา ภาคะ</h2>
             <div class="subtitle">HR Tech Student & Front-end Developer</div>

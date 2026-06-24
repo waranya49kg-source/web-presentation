@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fleet Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
+        .container { display: flex; gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; }
+        h1 { text-align: center; color: #222; margin-bottom: 30px; }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f8f9fa; color: #333; }
+        .summary-box { background-color: #e9ecef; padding: 15px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-around; }
+        .stat { text-align: center; font-size: 18px; font-weight: bold; }
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; color: white; font-weight: bold; }
+        .bg-success { background-color: #28a745; }
+        .bg-warning { background-color: #ffc107; color: #333; }
+    </style>
+</head>
+<body>
+
+    <h1>ระบบการจัดการและนำเสนอข้อมูลยานพาหนะ (Smart Fleet Dashboard)</h1>
+    
+    <div class="container">
+        <div class="card">
+            <h2>บันทึกการใช้งานยานพาหนะ</h2>
+            <form id="fleetForm">
+                <div class="form-group">
+                    <label for="carId">หมายเลขทะเบียนรถ / รหัสรถ:</label>
+                    <input type="text" id="carId" required placeholder="เช่น รล-1234">
+                </div>
+                <div class="form-group">
+                    <label for="carType">ประเภทรถ:</label>
+                    <select id="carType">
+                        <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
+                        <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
+                        <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="distance">ระยะทางที่วิ่งได้ (กิโลเมตร):</label>
+                    <input type="number" id="distance" min="1" required placeholder="กรอกระยะทางตัวเลข">
+                </div>
+                <div class="form-group">
+                    <label for="fuel">ปริมาณน้ำมันที่ใช้ (ลิตร):</label>
+                    <input type="number" id="fuel" min="1" required placeholder="กรอกจำนวนลิตร">
+                </div>
+                <button type="submit">บันทึกและคำนวณผลลัพธ์</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>แผงสรุปข้อมูลเชิงลึก (Interactive Dashboard)</h2>
+            
+            <div class="summary-box">
+                <div class="stat">จำนวนการวิ่งทั้งหมด: <span id="totalTrips" style="color:#007bff;">0</span> ครั้ง</div>
+                <div class="stat">ระยะทางรวม: <span id="totalDistance" style="color:#28a745;">0</span> กม.</div>
+            </div>
+
+            <h3>ตารางบันทึกข้อมูลยานพาหนะ</h3>
+            <table id="fleetTable">
+                <thead>
+                    <tr>
+                        <th>รหัสรถ</th>
+                        <th>ประเภท</th>
+                        <th>ระยะทาง</th>
+                        <th>น้ำมันที่ใช้</th>
+                        <th>อัตราสิ้นเปลือง</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let fleetData = [];
+
+        document.getElementById('fleetForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+
+            const carId = document.getElementById('carId').value;
+            const carType = document.getElementById('carType').value;
+            const distance = parseFloat(document.getElementById('distance').value);
+            const fuel = parseFloat(document.getElementById('fuel').value);
+
+            // คำนวณอัตราสิ้นเปลืองน้ำมันแบบ Dynamic บนเว็บเพจด้วย JavaScript
+            const consumption = (distance / fuel).toFixed(2);
+            
+            let statusBadge = consumption >= 10 ? 
+                `<span class="badge bg-success">${consumption} กม./ลิตร (ประหยัด)</span>` : 
+                `<span class="badge bg-warning">${consumption} กม./ลิตร (กินน้ำมัน)</span>`;
+
+            fleetData.push({ carId, carType, distance, fuel, statusBadge });
+
+            refreshDashboard();
+            document.getElementById('fleetForm').reset();
+        });
+
+        function refreshDashboard() {
+            const tbody = document.querySelector('#fleetTable tbody');
+            tbody.innerHTML = ''; 
+
+            let sumDistance = 0;
+
+            fleetData.forEach(function(item) {
+                const row = `<tr>
+                    <td>${item.carId}</td>
+                    <td>${item.carType}</td>
+                    <td>${item.distance} กม.</td>
+                    <td>${item.fuel} ลิตร</td>
+                    <td>${item.statusBadge}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+                sumDistance += item.distance;
+            });
+
+            document.getElementById('totalTrips').innerText = fleetData.length;
+            document.getElementById('totalDistance').innerText = sumDistance;
+        }
+    </script>
+</body>
+</html>

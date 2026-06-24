@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Fleet Dashboard</title>
+    <title>Smart Fleet - บันทึกข้อมูล</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -15,192 +15,30 @@
             --border: #e2e8f0;
             --success: #10b981;
             --warning: #f59e0b;
-            --danger: #ef4444;
-            --danger-hover: #dc2626;
         }
-
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--background); 
-            color: var(--text-main);
-            margin: 0; 
-            padding: 0; 
-        }
-
-        .navbar {
-            background-color: #0f172a;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .navbar-brand { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
+        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .navbar-brand { font-size: 18px; font-weight: 700; }
         .nav-links { display: flex; gap: 10px; }
-        
-        .nav-link {
-            color: #94a3b8;
-            text-decoration: none;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-
+        .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
         .nav-link:hover { color: white; background-color: #1e293b; }
         .nav-link.active { color: white; background-color: var(--primary); }
-        .main-content { padding: 30px 20px; }
-        .main-header { text-align: center; margin-bottom: 40px; }
-        .main-header h1 { font-size: 28px; font-weight: 700; color: var(--text-main); margin: 0 0 8px 0; }
-        .main-header p { color: var(--text-muted); margin: 0; font-size: 15px; }
-
-        .container { 
-            display: flex; 
-            gap: 30px; 
-            max-width: 1280px; 
-            margin: 0 auto; 
-            align-items: flex-start;
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            padding: 28px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); 
-            border: 1px solid var(--border);
-            flex: 1; 
-        }
-
-        .card-left { max-width: 400px; }
-
-        h2 { 
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-main); 
-            margin-top: 0;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .main-content { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); }
+        h2 { font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 24px; text-align: center; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--text-main); }
-
-        input, select { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            font-size: 14px; 
-            transition: all 0.2s;
-            background-color: #fcfdfe;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            background-color: #fff;
-        }
-
-        button { 
-            color: white; 
-            border: none; 
-            padding: 14px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-size: 15px; 
-            font-weight: 600; 
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: #fcfdfe; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); background-color: #fff; }
+        
+        button { color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 600; transition: all 0.2s; margin-top: 10px; }
         .btn-submit { background-color: var(--primary); }
         .btn-submit:hover { background-color: var(--primary-hover); }
-        
-        /* สไตล์ปุ่มตอนกำลังแก้ไขข้อมูล */
         .btn-update { background-color: var(--warning); color: #0f172a; }
         .btn-update:hover { background-color: #d97706; }
-
-        /* ปุ่มขนาดเล็กในตาราง */
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 6px;
-            width: auto;
-            margin-top: 0;
-            margin-right: 5px;
-            display: inline-block;
-        }
-        .btn-edit { background-color: #e2e8f0; color: var(--text-main); }
-        .btn-edit:hover { background-color: #cbd5e1; }
-        .btn-delete { background-color: var(--danger); }
-        .btn-delete:hover { background-color: var(--danger-hover); }
-
-        .profile-badge {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f1f5f9;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            font-size: 13px;
-            border: 1px solid var(--border);
-        }
-
-        .profile-info { color: var(--text-main); font-weight: 500; }
-        .meta-info { color: var(--text-muted); text-align: right; }
-
-        .summary-box { 
-            background-color: #f8fafc; 
-            padding: 20px; 
-            border-radius: 10px; 
-            margin-bottom: 28px; 
-            display: flex; 
-            justify-content: space-around; 
-            border: 1px solid var(--border);
-        }
-
-        .stat { text-align: center; font-size: 14px; color: var(--text-muted); font-weight: 500; }
-        .stat-value { display: block; font-size: 24px; font-weight: 700; color: var(--text-main); margin-top: 4px; }
-
-        h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-        .table-responsive { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
         
-        th { 
-            background-color: #f1f5f9; 
-            color: var(--text-muted); 
-            font-weight: 600;
-            border-bottom: 2px solid var(--border);
-        }
-
-        td { border-bottom: 1px solid var(--border); color: #334155; }
-        tr:hover td { background-color: #f8fafc; }
-
-        .badge { 
-            padding: 6px 12px; 
-            border-radius: 6px; 
-            font-size: 12px; 
-            color: white; 
-            font-weight: 600; 
-            display: inline-block;
-        }
-        .bg-success { background-color: var(--success); }
-        .bg-warning { background-color: var(--warning); }
-
-        @media (max-width: 968px) {
-            .container { flex-direction: column; }
-            .card-left { max-width: 100%; }
-        }
+        .alert-success { background-color: #ecfdf5; color: #065f46; padding: 12px; border-radius: 8px; border: 1px solid #a7f3d0; margin-bottom: 15px; text-align: center; font-size: 14px; display: none; }
+        .hint-text { font-size: 12px; color: var(--text-muted); margin-top: 4px; display: block; }
     </style>
 </head>
 <body>
@@ -208,183 +46,137 @@
     <nav class="navbar">
         <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
         <div class="nav-links">
-            <a href="index.html" class="nav-link active">แผงควบคุม (Dashboard)</a>
-            <a href="database.html" class="nav-link">คลังข้อมูลยานพาหนะ</a>
-            <a href="developer.html" class="nav-link">ข้อมูลผู้พัฒนา</a>
+            <a href="index.html" class="nav-link active">📝 บันทึกข้อมูลการวิ่งรถ</a>
+            <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
         </div>
     </nav>
 
     <div class="main-content">
-        <div class="main-header">
-            <h1>ระบบการจัดการและนำเสนอข้อมูลยานพาหนะ</h1>
-            <p>Smart Fleet Interactive Dashboard & Data Analysis</p>
-        </div>
+        <div class="alert-success" id="successAlert">🎉 บันทึกข้อมูลสำเร็จ! และอัปเดตไปยังระบบคลังประวัติแล้ว</div>
         
-        <div class="container">
-            <div class="card card-left">
-                <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถ</h2>
-                <form id="fleetForm">
-                    <div class="form-group">
-                        <label for="carId">หมายเลขทะเบียนรถ / รหัสรถ</label>
-                        <input type="text" id="carId" required placeholder="เช่น รล-1234">
-                    </div>
-                    <div class="form-group">
-                        <label for="carType">ประเภทรถยนต์</label>
-                        <select id="carType">
-                            <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
-                            <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
-                            <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="distance">ระยะทางที่วิ่งได้ (กิโลเมตร)</label>
-                        <input type="number" id="distance" min="1" required placeholder="กรอกตัวเลขระยะทาง">
-                    </div>
-                    <div class="form-group">
-                        <label for="fuel">ปริมาณน้ำมันที่ใช้ (ลิตร)</label>
-                        <input type="number" id="fuel" min="1" required placeholder="กรอกตัวเลขจำนวนลิตร">
-                    </div>
-                    <button type="submit" id="submitBtn" class="btn-submit">คำนวณและบันทึกข้อมูล</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <h2>📊 แผงควบคุมสรุปผลสถิติ</h2>
-                
-                <div class="profile-badge">
-                    <div class="profile-info">ผู้ดูแลระบบ: วรัญญา ภาคะ (รหัส 67540044)</div>
-                    <div class="meta-info">ฝ่ายยานพาหนะ | Department of Highways</div>
+        <div class="card">
+            <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถและเลขไมล์</h2>
+            <form id="fleetForm">
+                <div class="form-group">
+                    <label for="carId">หมายเลขทะเบียนรถ</label>
+                    <input type="text" id="carId" required placeholder="เช่น รล-5501">
+                    <span id="mileHint" class="hint-text"></span>
                 </div>
-                
-                <div class="summary-box">
-                    <div class="stat">
-                        จำนวนการวิ่งทั้งหมด
-                        <span id="totalTrips" class="stat-value" style="color: var(--primary);">0 ครั้ง</span>
-                    </div>
-                    <div class="stat">
-                        ระยะทางสะสมรวม
-                        <span id="totalDistance" class="stat-value" style="color: var(--success);">0 กม.</span>
-                    </div>
+                <div class="form-group">
+                    <label for="carType">ประเภทรถยนต์</label>
+                    <select id="carType">
+                        <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
+                        <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
+                        <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
+                    </select>
                 </div>
-
-                <h3>📋 ตารางประเมินผลประสิทธิภาพน้ำมัน</h3>
-                <div class="table-responsive">
-                    <table id="fleetTable">
-                        <thead>
-                            <tr>
-                                <th>รหัสรถ</th>
-                                <th>ประเภท</th>
-                                <th>ระยะทาง</th>
-                                <th>น้ำมันที่ใช้</th>
-                                <th>การประเมิน</th>
-                                <th>จัดการข้อมูล</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="form-group">
+                    <label for="currentOdometer">เลขไมล์ปัจจุบัน (กิโลเมตร)</label>
+                    <input type="number" id="currentOdometer" min="1" required placeholder="เช่น 45200">
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="distance">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
+                    <input type="number" id="distance" min="1" required placeholder="เช่น 120">
+                </div>
+                <div class="form-group">
+                    <label for="fuel">ปริมาณน้ำมันที่ใช้ในรอบนี้ (ลิตร)</label>
+                    <input type="number" id="fuel" min="1" required placeholder="เช่น 10">
+                </div>
+                <button type="submit" id="submitBtn" class="btn-submit">บันทึกข้อมูลและส่งรายงาน</button>
+            </form>
         </div>
     </div>
 
     <script>
-        let fleetData = [];
-        let editIndex = -1; // -1 แปลว่าโหมดปกติ (บันทึกใหม่), ถ้า >= 0 แปลว่ากำลังแก้ไขตัวดัชนีนั้นอยู่
+        let editIndex = -1; // -1 แปลว่าโหมดบันทึกใหม่ปกติ
 
-        document.getElementById('fleetForm').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-
-            const carId = document.getElementById('carId').value;
-            const carType = document.getElementById('carType').value;
-            const distance = parseFloat(document.getElementById('distance').value);
-            const fuel = parseFloat(document.getElementById('fuel').value);
-
-            const consumption = (distance / fuel).toFixed(2);
+        // ฟังก์ชันเริ่มตรวจสอบโหมดการทำงานเมื่อเปิดหน้าเว็บ (เช่น ตรวจสอบว่าถูกลิงก์ส่งตัวมาให้แก้ไขข้อมูลหรือไม่)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get('edit');
             
-            let statusBadge = consumption >= 10 ? 
-                `<span class="badge bg-success">${consumption} กม./ลิตร (ประหยัด)</span>` : 
-                `<span class="badge bg-warning">${consumption} กม./ลิตร (กินน้ำมัน)</span>`;
-
-            // ดำเนินการตามโหมดปัจจุบัน
-            if (editIndex === -1) {
-                // โหมดปกติ: เพิ่มข้อมูลใหม่ลง Array
-                fleetData.push({ carId, carType, distance, fuel, statusBadge });
-            } else {
-                // โหมดแก้ไข: อัปเดตทับข้อมูลเดิมที่เลือก
-                fleetData[editIndex] = { carId, carType, distance, fuel, statusBadge };
-                resetFormMode(); // บันทึกเสร็จแล้วให้ล้างสถานะกลับไปโหมดปกติ
+            if (editId !== null) {
+                editIndex = parseInt(editId);
+                let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+                
+                if (fleetData[editIndex]) {
+                    const item = fleetData[editIndex];
+                    // ยัดข้อมูลเก่าคืนฟอร์มเพื่อเตรียมแก้ไข
+                    document.getElementById('carId').value = item.carId;
+                    document.getElementById('carType').value = item.carType;
+                    document.getElementById('currentOdometer').value = item.currentOdometer;
+                    document.getElementById('distance').value = item.distance;
+                    document.getElementById('fuel').value = item.fuel;
+                    
+                    // ปรับหน้าตาฟอร์มให้เป็นโหมดแก้ไข
+                    document.getElementById('formTitle').innerText = "✏️ แก้ไขรายงานข้อมูลรถ " + item.carId;
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.innerText = "อัปเดตข้อมูลการแก้ไข";
+                    submitBtn.className = "btn-update";
+                }
             }
+        };
 
-            refreshDashboard();
+        // ระบบ Auto-fill ตรวจหาประวัติเลขไมล์ล่าสุดเมื่อผู้ใช้งานกรอกเลขทะเบียนรถเดิม
+        document.getElementById('carId').addEventListener('input', function() {
+            if (editIndex !== -1) return; // ถ้าอยู่ในโหมดแก้ไขไม่ต้องทำงานซ้อนกัน
+            
+            const carIdInput = this.value.trim();
+            let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            
+            // ค้นหาข้อมูลล่าสุดของทะเบียนนี้ในระบบ (กรองจากหลังสุดมาหน้าสุด)
+            const lastRecord = fleetData.slice().reverse().find(item => item.carId === carIdInput);
+            const hintSpan = document.getElementById('mileHint');
+            
+            if (lastRecord) {
+                hintSpan.style.color = "var(--primary)";
+                hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุดของคันนี้: ไมล์อยู่ที่ ${lastRecord.currentOdometer.toLocaleString()} กม.`;
+            } else {
+                hintSpan.innerText = "";
+            }
         });
 
-        // ฟังก์ชันล้างฟอร์มและรีเซ็ตกลับเข้าสู่โหมดบันทึกข้อมูลปกติ
-        function resetFormMode() {
-            editIndex = -1;
-            document.getElementById('fleetForm').reset();
-            document.getElementById('formTitle').innerText = "📝 บันทึกข้อมูลการวิ่งรถ";
+        document.getElementById('fleetForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const carId = document.getElementById('carId').value.trim();
+            const carType = document.getElementById('carType').value;
+            const currentOdometer = parseFloat(document.getElementById('currentOdometer').value);
+            const distance = parseFloat(document.getElementById('distance').value);
+            const fuel = parseFloat(document.getElementById('fuel').value);
             
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "คำนวณและบันทึกข้อมูล";
-            submitBtn.className = "btn-submit";
-        }
+            const date = new Date().toLocaleDateString('th-TH');
+            let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
 
-        // ฟังก์ชันดึงข้อมูลในแถวกลับขึ้นไปบนฟอร์มเพื่อแก้ไข
-        function editRow(index) {
-            editIndex = index;
-            const item = fleetData[index];
+            // คำนวณอัตราสิ้นเปลืองน้ำมัน
+            const consumption = (distance / fuel).toFixed(2);
 
-            // ดึงค่าเก่าไปแปะในอินพุต
-            document.getElementById('carId').value = item.carId;
-            document.getElementById('carType').value = item.carType;
-            document.getElementById('distance').value = item.distance;
-            document.getElementById('fuel').value = item.fuel;
-
-            // เปลี่ยนดีไซน์ของหัวข้อฟอร์มและปุ่มกดเพื่อแจ้งเตือนผู้ใช้ว่าอยู่ในโหมดแก้ไข
-            document.getElementById('formTitle').innerText = "✏️ กำลังแก้ไขข้อมูลรถ " + item.carId;
-            
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "อัปเดตการแก้ไขข้อมูล";
-            submitBtn.className = "btn-update";
-            
-            // สโครลหน้าจอขึ้นไปที่ฟอร์มเพื่อให้ใช้งานง่ายบนมือถือ
-            document.getElementById('fleetForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // ฟังก์ชันลบข้อมูลออกจาก Array
-        function deleteRow(index) {
-            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลแถวนี้?")) {
-                fleetData.splice(index, 1);
-                if(editIndex === index) { resetFormMode(); } // ถ้าลบแถวที่กำลังเปิดแก้ค้างอยู่ ให้รีเซ็ตฟอร์มด้วย
-                refreshDashboard();
+            if (editIndex === -1) {
+                // โหมดปกติ: บันทึกข้อมูลแถวใหม่ต่อท้าย Array
+                fleetData.push({ date, carId, carType, currentOdometer, distance, fuel, consumption });
+            } else {
+                // โหมดแก้ไข: อัปเดตทับอินเดกซ์เดิมที่ระบุมา
+                fleetData[editIndex] = { date, carId, carType, currentOdometer, distance, fuel, consumption };
             }
-        }
 
-        function refreshDashboard() {
-            const tbody = document.querySelector('#fleetTable tbody');
-            tbody.innerHTML = ''; 
+            // เซฟกลับลงเครื่องผ่านคีย์กลาง 'fleetLogs'
+            localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
 
-            let sumDistance = 0;
-
-            fleetData.forEach(function(item, index) {
-                const row = `<tr>
-                    <td style="font-weight: 600;">${item.carId}</td>
-                    <td>${item.carType}</td>
-                    <td>${item.distance.toLocaleString()} กม.</td>
-                    <td>${item.fuel.toLocaleString()} ลิตร</td>
-                    <td>${item.statusBadge}</td>
-                    <td>
-                        <button onclick="editRow(${index})" class="btn-sm btn-edit">แก้ไข</button>
-                        <button onclick="deleteRow(${index})" class="btn-sm btn-delete">ลบ</button>
-                    </td>
-                </tr>`;
-                tbody.innerHTML += row;
-                sumDistance += item.distance;
-            });
-
-            document.getElementById('totalTrips').innerText = fleetData.length.toLocaleString() + ' ครั้ง';
-            document.getElementById('totalDistance').innerText = sumDistance.toLocaleString() + ' กม.';
-        }
+            // แสดงสถานะบันทึกสำเร็จ
+            const alertBox = document.getElementById('successAlert');
+            alertBox.style.display = 'block';
+            
+            // ล้างฟอร์มและรีเซ็ตค่า
+            document.getElementById('fleetForm').reset();
+            document.getElementById('mileHint').innerText = "";
+            
+            if (editIndex !== -1) {
+                // ถ้าแก้ไขเสร็จแล้วให้เตะผู้ใช้กลับไปหน้าประวัติหลังจากผ่านไป 1.5 วินาที
+                setTimeout(() => { window.location.href = 'history.html'; }, 1500);
+            } else {
+                setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+            }
+        });
     </script>
 </body>
 </html>

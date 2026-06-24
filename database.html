@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังข้อมูลยานพาหนะ - Smart Fleet</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #0f172a; margin: 0; padding: 0; }
+        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .navbar-brand { font-size: 18px; font-weight: 700; }
+        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 20px; font-weight: 600; font-size: 14px; }
+        .nav-links a:hover, .nav-links a.active { color: white; }
+        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .card { background: white; padding: 28px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid #e2e8f0; }
+        h2 { font-size: 22px; font-weight: 600; margin-top: 0; margin-bottom: 10px; }
+        p { color: #64748b; margin-bottom: 24px; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
+        th { background-color: #f1f5f9; color: #64748b; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+        td { border-bottom: 1px solid #e2e8f0; }
+        .badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; color: white; font-weight: 600; }
+        .bg-success { background-color: #10b981; }
+        .bg-warning { background-color: #f59e0b; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
+        <div class="nav-links">
+            <a href="index.html">แผงควบคุม (Dashboard)</a>
+            <a href="database.html" class="active">คลังข้อมูลยานพาหนะ</a>
+            <a href="developer.html">ข้อมูลผู้พัฒนา</a>
+        </div>
+    </nav>
+    
+    <div class="main-container">
+        <div class="card">
+            <h2>🗃️ คลังทะเบียนยานพาหนะในระบบ (Fleet Database)</h2>
+            <p>รายชื่อรถยนต์ทั้งหมดที่ลงทะเบียนในสังกัดฝ่ายยานพาหนะ ส่วนราชการจังหวัดชลบุรี</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>รหัสทะเบียน</th><th>ประเภทรถ</th><th>สถานะการใช้งาน</th><th>สังกัดหน่วยงาน</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="font-weight:600;">รล-5501</td><td>รถบรรทุก 6 ล้อ</td><td><span class="badge bg-success">พร้อมใช้งาน</span></td><td>หมวดทางหลวงชลบุรี</td></tr>
+                    <tr><td style="font-weight:600;">รล-5502</td><td>รถบรรทุก 6 ล้อ</td><td><span class="badge bg-success">พร้อมใช้งาน</span></td><td>หมวดทางหลวงชลบุรี</td></tr>
+                    <tr><td style="font-weight:600;">ชม-1204</td><td>รถกระบะตรวจการ</td><td><span class="badge bg-success">พร้อมใช้งาน</span></td><td>ฝ่ายปฏิบัติการพิเศษ</td></tr>
+                    <tr><td style="font-weight:600;">นบ-3340</td><td>รถเอนกประสงค์</td><td><span class="badge bg-warning">กำลังซ่อมบำรุง</span></td><td>ส่วนกลางบริหาร</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

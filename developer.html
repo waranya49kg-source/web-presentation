@@ -22,20 +22,28 @@
         .nav-link.active { color: white; background-color: var(--primary); }
         
         .main-container { max-width: 650px; margin: 50px auto; padding: 0 20px; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
         
-        /* CSS ปรับแต่งรูปภาพโปรไฟล์ให้เป็นทรงกลมสวยงาม */
+        /* ปรับ padding ของการ์ดเพิ่มขึ้นเพื่อไม่ให้ชิดขอบด้านบนเกินไป */
+        .card { background: white; padding: 50px 40px 40px 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); text-align: center; }
+        
+        /* แก้ไขปัญหาการทับซ้อนและจัดระเบียบโครงสร้างรูปภาพ */
+        .profile-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 24px auto; /* เว้นระยะห่างด้านล่างไม่ให้ข้อความดันขึ้นมาทับ */
+            position: relative;
+        }
         .profile-img { 
-            width: 140px; 
-            height: 140px; 
+            width: 100%; 
+            height: 100%; 
             border-radius: 50%; 
-            margin: 0 auto 20px; 
             border: 4px solid var(--border);
-            object-fit: cover; /* ป้องกันไม่ให้รูปภาพเบี้ยวหรือยืด */
+            object-fit: cover;
             display: block;
+            background-color: #e2e8f0; /* สีกำลังโหลดหรือพื้นหลังกรณีไม่มีรูป */
         }
         
-        h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; }
+        h2 { font-size: 24px; font-weight: 600; margin: 0 0 8px 0; line-height: 1.4; }
         .subtitle { color: var(--primary); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
         
         .info-grid { border-top: 1px solid var(--border); padding-top: 24px; text-align: left; }
@@ -62,7 +70,9 @@
     <div class="main-container">
         <div class="card">
             
-            <img src="profile.jpg" alt="วรัญญา ภาคะ" class="profile-img">
+            <div class="profile-container">
+                <img src="profile.jpg" alt="วรัญญา ภาคะ" class="profile-img">
+            </div>
             
             <h2>วรัญญา ภาคะ</h2>
             <div class="subtitle">HR Tech Student & Front-end Developer</div>

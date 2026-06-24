@@ -60,25 +60,25 @@
             <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถและเลขไมล์</h2>
             <form id="fleetForm">
                 <div class="form-group">
-                    <label for="carId">หมายเลขทะเบียนรถ</label>
-                    <input type="text" id="carId" required placeholder="เช่น รล-5501">
+                    <label for="carId">รหัสพัสดุ / หมายเลขทะเบียนรถ</label>
+                    <input type="text" id="carId" required placeholder="เช่น 44-0680-18-0">
                     <span id="mileHint" class="hint-text"></span>
                 </div>
                 <div class="form-group">
                     <label for="carType">ประเภทรถยนต์</label>
                     <select id="carType">
-                        <option value="รถบรรทุก 6 ล้อ">รถบรรทุก 6 ล้อ</option>
-                        <option value="รถกระบะตรวจการ">รถกระบะตรวจการ</option>
-                        <option value="รถเอนกประสงค์">รถตู้/รถเอนกประสงค์</option>
+                        <option value="รถกระบะตรวจการ (ออกตรวจหน้างาน)">รถกระบะตรวจการ (ออกตรวจหน้างาน)</option>
+                        <option value="รถเครน">รถเครน</option>
+                        <option value="รถบรรทุก">รถบรรทุก</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="currentOdometer">เลขไมล์ปัจจุบัน (กิโลเมตร)</label>
-                    <input type="number" id="currentOdometer" min="1" required placeholder="เช่น 45200">
+                    <input type="number" id="currentOdometer" min="1" required placeholder="เช่น 296709">
                 </div>
                 <div class="form-group">
                     <label for="distance">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
-                    <input type="number" id="distance" min="1" required placeholder="เช่น 120">
+                    <input type="number" id="distance" min="0" required placeholder="เช่น 120">
                 </div>
                 <div class="form-group">
                     <label for="fuel">ปริมาณน้ำมันที่ใช้ในรอบนี้ (ลิตร)</label>
@@ -90,9 +90,8 @@
     </div>
 
     <script>
-        let editIndex = -1; // -1 แปลว่าโหมดบันทึกใหม่ปกติ
+        let editIndex = -1;
 
-        // ฟังก์ชันเริ่มตรวจสอบโหมดการทำงานเมื่อเปิดหน้าเว็บ (เช่น ตรวจสอบว่าถูกลิงก์ส่งตัวมาให้แก้ไขข้อมูลหรือไม่)
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const editId = urlParams.get('edit');
@@ -103,14 +102,12 @@
                 
                 if (fleetData[editIndex]) {
                     const item = fleetData[editIndex];
-                    // ยัดข้อมูลเก่าคืนฟอร์มเพื่อเตรียมแก้ไข
                     document.getElementById('carId').value = item.carId;
                     document.getElementById('carType').value = item.carType;
                     document.getElementById('currentOdometer').value = item.currentOdometer;
                     document.getElementById('distance').value = item.distance;
                     document.getElementById('fuel').value = item.fuel;
                     
-                    // ปรับหน้าตาฟอร์มให้เป็นโหมดแก้ไข
                     document.getElementById('formTitle').innerText = "✏️ แก้ไขรายงานข้อมูลรถ " + item.carId;
                     const submitBtn = document.getElementById('submitBtn');
                     submitBtn.innerText = "อัปเดตข้อมูลการแก้ไข";
@@ -119,14 +116,11 @@
             }
         };
 
-        // ระบบ Auto-fill ตรวจหาประวัติเลขไมล์ล่าสุดเมื่อผู้ใช้งานกรอกเลขทะเบียนรถเดิม
         document.getElementById('carId').addEventListener('input', function() {
-            if (editIndex !== -1) return; // ถ้าอยู่ในโหมดแก้ไขไม่ต้องทำงานซ้อนกัน
+            if (editIndex !== -1) return;
             
             const carIdInput = this.value.trim();
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            
-            // ค้นหาข้อมูลล่าสุดของทะเบียนนี้ในระบบ (กรองจากหลังสุดมาหน้าสุด)
             const lastRecord = fleetData.slice().reverse().find(item => item.carId === carIdInput);
             const hintSpan = document.getElementById('mileHint');
             
@@ -148,31 +142,22 @@
             
             const date = new Date().toLocaleDateString('th-TH');
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-
-            // คำนวณอัตราสิ้นเปลืองน้ำมัน
             const consumption = (distance / fuel).toFixed(2);
 
             if (editIndex === -1) {
-                // โหมดปกติ: บันทึกข้อมูลแถวใหม่ต่อท้าย Array
                 fleetData.push({ date, carId, carType, currentOdometer, distance, fuel, consumption });
             } else {
-                // โหมดแก้ไข: อัปเดตทับอินเดกซ์เดิมที่ระบุมา
                 fleetData[editIndex] = { date, carId, carType, currentOdometer, distance, fuel, consumption };
             }
 
-            // เซฟกลับลงเครื่องผ่านคีย์กลาง 'fleetLogs'
             localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
 
-            // แสดงสถานะบันทึกสำเร็จ
             const alertBox = document.getElementById('successAlert');
             alertBox.style.display = 'block';
-            
-            // ล้างฟอร์มและรีเซ็ตค่า
             document.getElementById('fleetForm').reset();
             document.getElementById('mileHint').innerText = "";
             
             if (editIndex !== -1) {
-                // ถ้าแก้ไขเสร็จแล้วให้เตะผู้ใช้กลับไปหน้าประวัติหลังจากผ่านไป 1.5 วินาที
                 setTimeout(() => { window.location.href = 'history.html'; }, 1500);
             } else {
                 setTimeout(() => { alertBox.style.display = 'none'; }, 3000);

@@ -32,14 +32,42 @@
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: #fcfdfe; }
         input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); background-color: #fff; }
-        
+
+        /* ---- สไตล์ช่องคำนวณอัตโนมัติ ---- */
+        .auto-calc-box {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px dashed var(--primary);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            background-color: #eef2ff;
+            cursor: default;
+        }
+        .calc-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .badge-auto {
+            font-size: 11px;
+            background-color: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
         button { color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 600; transition: all 0.2s; margin-top: 10px; }
         button:disabled { background-color: #cbd5e1; cursor: not-allowed; color: #94a3b8; }
         .btn-submit { background-color: var(--primary); }
         .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); }
         .btn-update { background-color: var(--warning); color: #0f172a; }
         .btn-update:hover:not(:disabled) { background-color: #d97706; }
-        
+
         .alert-success { background-color: #ecfdf5; color: #065f46; padding: 12px; border-radius: 8px; border: 1px solid #a7f3d0; margin-bottom: 15px; text-align: center; font-size: 14px; display: none; }
         .hint-text { font-size: 12px; color: var(--primary); margin-top: 6px; display: block; font-weight: 500; }
         .error-text { font-size: 12px; color: var(--danger); margin-top: 6px; display: none; font-weight: 600; }
@@ -59,12 +87,12 @@
 
     <div class="main-content">
         <div class="alert-success" id="successAlert">🎉 บันทึกข้อมูลสำเร็จ! และอัปเดตไปยังระบบคลังประวัติแล้ว</div>
-        
+
         <div class="card">
             <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถและเลขไมล์</h2>
             <div class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</div>
             <form id="fleetForm">
-                
+
                 <div class="form-group">
                     <label for="driverName">ชื่อพนักงานขับรถ</label>
                     <select id="driverName" required>
@@ -97,10 +125,17 @@
                     <span id="mileError" class="error-text">❌ เตือน: เลขไมล์ปัจจุบันน้อยกว่าเลขไมล์ล่าสุดของรถคันนี้!</span>
                 </div>
 
+                <!-- ▼▼▼ เปลี่ยนจาก input ธรรมดา → แสดงผลคำนวณอัตโนมัติ ▼▼▼ -->
                 <div class="form-group">
-                    <label for="distance">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
-                    <input type="number" id="distance" min="0" required placeholder="เช่น 120">
+                    <div class="calc-label-row">
+                        <label style="margin:0">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
+                        <span class="badge-auto">⚡ คำนวณอัตโนมัติ</span>
+                    </div>
+                    <div class="auto-calc-box" id="distanceDisplay">— กม. (กรอกเลขไมล์ก่อน)</div>
+                    <!-- hidden input สำหรับเก็บค่าส่ง form -->
+                    <input type="hidden" id="distance">
                 </div>
+                <!-- ▲▲▲ จบส่วนเปลี่ยนแปลง ▲▲▲ -->
 
                 <div class="form-group">
                     <label for="fuel">ปริมาณน้ำมันที่ใช้ในรอบนี้ (ลิตร)</label>
@@ -114,27 +149,29 @@
 
     <script>
         let editIndex = -1;
-        let lastOdometerValue = 0; 
+        let lastOdometerValue = 0;
 
         window.onload = function() {
             updateCarIdDatalist();
 
             const urlParams = new URLSearchParams(window.location.search);
             const editId = urlParams.get('edit');
-            
+
             if (editId !== null) {
                 editIndex = parseInt(editId);
                 let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-                
+
                 if (fleetData[editIndex]) {
                     const item = fleetData[editIndex];
                     document.getElementById('driverName').value = item.driverName || "";
                     document.getElementById('carId').value = item.carId;
                     document.getElementById('carType').value = item.carType;
                     document.getElementById('currentOdometer').value = item.currentOdometer;
+                    // โหมดแก้ไข: แสดงระยะทางเดิม
                     document.getElementById('distance').value = item.distance;
+                    document.getElementById('distanceDisplay').innerText = parseFloat(item.distance).toLocaleString() + ' กม. (ข้อมูลเดิม)';
                     document.getElementById('fuel').value = item.fuel;
-                    
+
                     document.getElementById('formTitle').innerText = "✏️ แก้ไขรายงานข้อมูลรถ " + item.carId;
                     const submitBtn = document.getElementById('submitBtn');
                     submitBtn.innerText = "อัปเดตข้อมูลการแก้ไข";
@@ -146,10 +183,8 @@
         function updateCarIdDatalist() {
             const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
             const datalist = document.getElementById('carIdList');
-            datalist.innerHTML = ""; 
-            
+            datalist.innerHTML = "";
             const uniqueCarIds = [...new Set(fleetData.map(item => item.carId))];
-            
             uniqueCarIds.forEach(carId => {
                 const option = document.createElement('option');
                 option.value = carId;
@@ -157,51 +192,66 @@
             });
         }
 
-        // ยุบฟังก์ชันดึงค่าล่าสุดมาไว้ในฟังก์ชันกลางเพื่อเรียกใช้ได้ครอบคลุม
         function checkLatestCarStats() {
-            if (editIndex !== -1) return; // ข้ามขั้นตอนนี้หากอยู่ระหว่างโหมดแก้ไขข้อมูลเก่า
-            
+            if (editIndex !== -1) return;
+
             const carIdInput = document.getElementById('carId').value.trim();
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            
-            // หาบันทึกอันล่าสุดจากอาร์เรย์ของทะเบียนนั้นๆ
             const lastRecord = fleetData.slice().reverse().find(item => item.carId === carIdInput);
             const hintSpan = document.getElementById('mileHint');
-            
+
             if (lastRecord) {
                 lastOdometerValue = parseFloat(lastRecord.currentOdometer);
-                hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุด: ไมล์อยู่ที่ ${lastOdometerValue.toLocaleString()} กม.`;
-                
-                // ดึงประเภทรถคันนั้นมาล็อกค่าให้เลือกโดยอัตโนมัติเพิ่มความสะดวก
+                hintSpan.innerText = `💡 เลขไมล์ครั้งก่อน: ${lastOdometerValue.toLocaleString()} กม.`;
                 document.getElementById('carType').value = lastRecord.carType;
             } else {
                 lastOdometerValue = 0;
                 hintSpan.innerText = "";
             }
-            validateOdometer();
+            validateOdometerAndCalcDistance(); // ▼ เรียกฟังก์ชันใหม่
         }
 
-        // บล็อกปัญหากดเลือกจากเมนูตัวช่วยพิมพ์ (Datalist) แล้วระบบตรวจจับไม่ทำงาน โดยผูกทั้ง input และ change
         document.getElementById('carId').addEventListener('input', checkLatestCarStats);
         document.getElementById('carId').addEventListener('change', checkLatestCarStats);
+        document.getElementById('currentOdometer').addEventListener('input', validateOdometerAndCalcDistance);
 
-        document.getElementById('currentOdometer').addEventListener('input', validateOdometer);
+        // ▼▼▼ ฟังก์ชันใหม่: ตรวจสอบ + คำนวณระยะทางอัตโนมัติ ▼▼▼
+        function validateOdometerAndCalcDistance() {
+            if (editIndex !== -1) return;
 
-        function validateOdometer() {
-            if (editIndex !== -1) return; 
-            
             const currentInput = parseFloat(document.getElementById('currentOdometer').value);
             const errorSpan = document.getElementById('mileError');
             const submitBtn = document.getElementById('submitBtn');
+            const distanceDisplay = document.getElementById('distanceDisplay');
+            const distanceInput = document.getElementById('distance');
 
-            if (currentInput && lastOdometerValue > 0 && currentInput < lastOdometerValue) {
-                errorSpan.style.display = 'block';
-                submitBtn.disabled = true; 
-            } else {
+            if (currentInput && lastOdometerValue > 0) {
+                if (currentInput < lastOdometerValue) {
+                    // ไมล์ผิดพลาด
+                    errorSpan.style.display = 'block';
+                    submitBtn.disabled = true;
+                    distanceDisplay.innerText = '— กม. (เลขไมล์ไม่ถูกต้อง)';
+                    distanceInput.value = '';
+                } else {
+                    // ✅ คำนวณระยะทาง
+                    errorSpan.style.display = 'none';
+                    submitBtn.disabled = false;
+                    const calculatedDistance = currentInput - lastOdometerValue;
+                    distanceDisplay.innerText = `${calculatedDistance.toLocaleString()} กม.  (${currentInput.toLocaleString()} − ${lastOdometerValue.toLocaleString()})`;
+                    distanceInput.value = calculatedDistance;
+                }
+            } else if (currentInput && lastOdometerValue === 0) {
+                // รถใหม่ที่ยังไม่มีข้อมูลเก่า → ให้กรอกระยะทางเองชั่วคราว
                 errorSpan.style.display = 'none';
-                submitBtn.disabled = false; 
+                submitBtn.disabled = false;
+                distanceDisplay.innerText = '— กม. (รถใหม่: ระบบจะบันทึกเลขไมล์ตั้งต้น)';
+                distanceInput.value = 0;
+            } else {
+                distanceDisplay.innerText = '— กม. (กรอกเลขไมล์ก่อน)';
+                distanceInput.value = '';
             }
         }
+        // ▲▲▲ จบฟังก์ชันใหม่ ▲▲▲
 
         document.getElementById('fleetForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -210,12 +260,12 @@
             const carId = document.getElementById('carId').value.trim();
             const carType = document.getElementById('carType').value;
             const currentOdometer = parseFloat(document.getElementById('currentOdometer').value);
-            const distance = parseFloat(document.getElementById('distance').value);
+            const distance = parseFloat(document.getElementById('distance').value) || 0;
             const fuel = parseFloat(document.getElementById('fuel').value);
-            
+
             const date = new Date().toLocaleDateString('th-TH');
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            const consumption = (distance / fuel).toFixed(2);
+            const consumption = fuel > 0 ? (distance / fuel).toFixed(2) : '0.00';
 
             const recordData = { date, driverName, carId, carType, currentOdometer, distance, fuel, consumption };
 
@@ -229,16 +279,16 @@
 
             const alertBox = document.getElementById('successAlert');
             alertBox.style.display = 'block';
-            
-            // รีเซ็ตฟอร์ม พร้อมล้างตัวแปรไมล์สะสมล่าสุดทิ้ง เพื่อให้พิมพ์รถคันอื่นต่อได้ทันทีโดยระบบไม่เอ๋อ
+
             document.getElementById('fleetForm').reset();
             document.getElementById('mileHint').innerText = "";
+            document.getElementById('distanceDisplay').innerText = '— กม. (กรอกเลขไมล์ก่อน)';
             lastOdometerValue = 0;
             document.getElementById('mileError').style.display = 'none';
             document.getElementById('submitBtn').disabled = false;
-            
+
             updateCarIdDatalist();
-            
+
             if (editIndex !== -1) {
                 setTimeout(() => { window.location.href = 'history.html'; }, 1500);
             } else {

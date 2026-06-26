@@ -57,8 +57,8 @@
     <div class="navbar-brand">📊 Smart Fleet Analytics</div>
     <div class="nav-links">
         <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
-        <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
-        <a href="database.html" class="nav-link">🗃️ คลังข้อมูลยานพาหนะ</a>
+        <a href="history.html" class="nav-link">📋 ประวัติการวิ่งรถ</a>
+        <a href="database.html" class="nav-link">📊 Dashboard &amp; แจ้งซ่อมบำรุง</a>
         <a href="manage.html" class="nav-link">🚗 จัดการรถ</a>
         <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
     </div>
@@ -98,6 +98,34 @@
     </div>
 
     <script>
+        // === Seed ข้อมูลตัวอย่าง (รันครั้งเดียวตอนเปิดเว็บครั้งแรกในเบราว์เซอร์นี้) ===
+        (function seedDemoData() {
+            if (localStorage.getItem('fleetSeeded')) return; // เคย seed แล้ว ไม่ทำซ้ำ (เคารพการ "ล้างประวัติ" ของผู้ใช้)
+
+            const seedFleet = [
+                { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
+                { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
+                { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
+            ];
+
+            const seedLogs = [
+                { date: '11/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 296850, distance: 141, fuel: 12,   consumption: '11.75' },
+                { date: '17/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297005, distance: 155, fuel: 13,   consumption: '11.92' },
+                { date: '23/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297190, distance: 185, fuel: 15.5, consumption: '11.94' },
+
+                { date: '12/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168350, distance: 230, fuel: 28, consumption: '8.21' },
+                { date: '18/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168570, distance: 220, fuel: 27, consumption: '8.15' },
+                { date: '24/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168800, distance: 230, fuel: 29, consumption: '7.93' },
+
+                { date: '08/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192700, distance: 186, fuel: 31, consumption: '6.00' },
+                { date: '13/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192910, distance: 210, fuel: 33, consumption: '6.36' },
+            ];
+
+            localStorage.setItem('fleetMaster', JSON.stringify(seedFleet));
+            localStorage.setItem('fleetLogs', JSON.stringify(seedLogs));
+            localStorage.setItem('fleetSeeded', 'true');
+        })();
+
         window.onload = function() {
             renderTable();
         };

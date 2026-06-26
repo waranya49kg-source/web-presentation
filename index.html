@@ -15,6 +15,7 @@
             --border: #e2e8f0;
             --success: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
         .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
@@ -25,26 +26,29 @@
         .nav-link.active { color: white; background-color: var(--primary); }
         .main-content { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); }
-        h2 { font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 24px; text-align: center; }
+        h2 { font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 8px; text-align: center; }
+        .subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; font-weight: 500; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-size: 14px; background-color: #fcfdfe; }
         input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); background-color: #fff; }
         
         button { color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 600; transition: all 0.2s; margin-top: 10px; }
+        button:disabled { background-color: #cbd5e1; cursor: not-allowed; color: #94a3b8; }
         .btn-submit { background-color: var(--primary); }
-        .btn-submit:hover { background-color: var(--primary-hover); }
+        .btn-submit:hover:not(:disabled) { background-color: var(--primary-hover); }
         .btn-update { background-color: var(--warning); color: #0f172a; }
-        .btn-update:hover { background-color: #d97706; }
+        .btn-update:hover:not(:disabled) { background-color: #d97706; }
         
         .alert-success { background-color: #ecfdf5; color: #065f46; padding: 12px; border-radius: 8px; border: 1px solid #a7f3d0; margin-bottom: 15px; text-align: center; font-size: 14px; display: none; }
         .hint-text { font-size: 12px; color: var(--primary); margin-top: 6px; display: block; font-weight: 500; }
+        .error-text { font-size: 12px; color: var(--danger); margin-top: 6px; display: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
+        <div class="navbar-brand">📊 Smart Fleet Analytics</div>
         <div class="nav-links">
             <a href="index.html" class="nav-link active">📝 บันทึกข้อมูลการวิ่งรถ</a>
             <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
@@ -58,14 +62,27 @@
         
         <div class="card">
             <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถและเลขไมล์</h2>
+            <div class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</div>
             <form id="fleetForm">
+                
+                <!-- เพิ่มฟิลด์เลือกชื่อพนักงานขับรถตามโจทย์ Digital HR -->
                 <div class="form-group">
-                    <label for="carId">หมายเลขทะเบียนรถ</label>
+                    <label for="driverName">ชื่อพนักงานขับรถ</label>
+                    <select id="driverName" required>
+                        <option value="" disabled selected>-- เลือกชื่อผู้ขับขี่ --</option>
+                        <option value="นายเฉลิมพล เอี่ยมสะอาด">นายเฉลิมพล เอี่ยมสะอาด</option>
+                        <option value="นายเสกสันต์ รังกลาง">นายเสกสันต์ รังกลาง</option>
+                        <option value="นายชาญกิจ โชติกาญ">นายชาญกิจ โชติกาญ</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="carId">รหัสพัสดุ / หมายเลขทะเบียนรถ</label>
                     <input type="text" id="carId" list="carIdList" required placeholder="พิมพ์เอง หรือเลือกจากรายการที่มี">
-                    <datalist id="carIdList">
-                        </datalist>
+                    <datalist id="carIdList"></datalist>
                     <span id="mileHint" class="hint-text"></span>
                 </div>
+
                 <div class="form-group">
                     <label for="carType">ประเภทรถยนต์</label>
                     <select id="carType">
@@ -74,18 +91,23 @@
                         <option value="รถบรรทุก">รถบรรทุก</option>
                     </select>
                 </div>
+
                 <div class="form-group">
                     <label for="currentOdometer">เลขไมล์ปัจจุบัน (กิโลเมตร)</label>
                     <input type="number" id="currentOdometer" min="1" required placeholder="เช่น 296709">
+                    <span id="mileError" class="error-text">❌ เตือน: เลขไมล์ปัจจุบันน้อยกว่าเลขไมล์ล่าสุดของรถคันนี้!</span>
                 </div>
+
                 <div class="form-group">
                     <label for="distance">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
                     <input type="number" id="distance" min="0" required placeholder="เช่น 120">
                 </div>
+
                 <div class="form-group">
                     <label for="fuel">ปริมาณน้ำมันที่ใช้ในรอบนี้ (ลิตร)</label>
                     <input type="number" id="fuel" min="1" required placeholder="เช่น 10">
                 </div>
+
                 <button type="submit" id="submitBtn" class="btn-submit">บันทึกข้อมูลและส่งรายงาน</button>
             </form>
         </div>
@@ -93,9 +115,9 @@
 
     <script>
         let editIndex = -1;
+        let lastOdometerValue = 0; // ตัวแปรเก็บเลขไมล์ล่าสุดเพื่อใช้ตรวจสอบ
 
         window.onload = function() {
-            // โหลดรายการทะเบียนรถทั้งหมดที่เคยบันทึกไว้มาใส่ลงใน Dropdown datalist
             updateCarIdDatalist();
 
             const urlParams = new URLSearchParams(window.location.search);
@@ -107,6 +129,7 @@
                 
                 if (fleetData[editIndex]) {
                     const item = fleetData[editIndex];
+                    document.getElementById('driverName').value = item.driverName || "";
                     document.getElementById('carId').value = item.carId;
                     document.getElementById('carType').value = item.carType;
                     document.getElementById('currentOdometer').value = item.currentOdometer;
@@ -121,16 +144,13 @@
             }
         };
 
-        // ฟังก์ชันดึงทะเบียนรถที่ไม่ซ้ำกันมาทำตัวเลือก Dropdown
         function updateCarIdDatalist() {
             const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
             const datalist = document.getElementById('carIdList');
-            datalist.innerHTML = ""; // เคลียร์ตัวเลือกเก่า
+            datalist.innerHTML = ""; 
             
-            // ดึงเฉพาะรหัส carId ที่ไม่ซ้ำกันออกมารวมเป็นก้อนเดียว
             const uniqueCarIds = [...new Set(fleetData.map(item => item.carId))];
             
-            // นำรหัสรถแต่ละคันมาสร้างเป็นตัวเลือก <option>
             uniqueCarIds.forEach(carId => {
                 const option = document.createElement('option');
                 option.value = carId;
@@ -138,6 +158,7 @@
             });
         }
 
+        // ฟังการกรอกรหัสรถเพื่อค้นหาเลขไมล์ล่าสุด
         document.getElementById('carId').addEventListener('input', function() {
             if (editIndex !== -1) return;
             
@@ -147,20 +168,42 @@
             const hintSpan = document.getElementById('mileHint');
             
             if (lastRecord) {
-                hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุดของคันนี้: ไมล์อยู่ที่ ${lastRecord.currentOdometer.toLocaleString()} กม.`;
+                lastOdometerValue = parseFloat(lastRecord.currentOdometer);
+                hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุด: ไมล์อยู่ที่ ${lastOdometerValue.toLocaleString()} กม.`;
                 
-                // ช่วยอำนวยความสะดวก: หากมีประวัติเดิม ให้ช่วยเลือกประเภทรถให้ตรงตามครั้งล่าสุดโดยอัตโนมัติ
                 if(document.getElementById('carType').value !== lastRecord.carType){
                     document.getElementById('carType').value = lastRecord.carType;
                 }
             } else {
+                lastOdometerValue = 0;
                 hintSpan.innerText = "";
             }
+            validateOdometer();
         });
+
+        // ฟังการกรอกเลขไมล์เพื่อตรวจสอบความถูกต้อง (Data Validation)
+        document.getElementById('currentOdometer').addEventListener('input', validateOdometer);
+
+        function validateOdometer() {
+            if (editIndex !== -1) return; // ข้ามการเช็กกรณีแก้ไขข้อมูลเก่า
+            
+            const currentInput = parseFloat(document.getElementById('currentOdometer').value);
+            const errorSpan = document.getElementById('mileError');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (currentInput && lastOdometerValue > 0 && currentInput < lastOdometerValue) {
+                errorSpan.style.display = 'block';
+                submitBtn.disabled = true; // บล็อกปุ่มไม่ให้กดส่ง
+            } else {
+                errorSpan.style.display = 'none';
+                submitBtn.disabled = false; // ปลดบล็อกปุ่ม
+            }
+        }
 
         document.getElementById('fleetForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
+            const driverName = document.getElementById('driverName').value;
             const carId = document.getElementById('carId').value.trim();
             const carType = document.getElementById('carType').value;
             const currentOdometer = parseFloat(document.getElementById('currentOdometer').value);
@@ -171,10 +214,12 @@
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
             const consumption = (distance / fuel).toFixed(2);
 
+            const recordData = { date, driverName, carId, carType, currentOdometer, distance, fuel, consumption };
+
             if (editIndex === -1) {
-                fleetData.push({ date, carId, carType, currentOdometer, distance, fuel, consumption });
+                fleetData.push(recordData);
             } else {
-                fleetData[editIndex] = { date, carId, carType, currentOdometer, distance, fuel, consumption };
+                fleetData[editIndex] = recordData;
             }
 
             localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
@@ -183,8 +228,8 @@
             alertBox.style.display = 'block';
             document.getElementById('fleetForm').reset();
             document.getElementById('mileHint').innerText = "";
+            lastOdometerValue = 0;
             
-            // อัปเดตตัวเลือกใน Dropdown ทันทีเมื่อบันทึกคันใหม่สำเร็จ
             updateCarIdDatalist();
             
             if (editIndex !== -1) {

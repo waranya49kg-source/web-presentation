@@ -26,7 +26,7 @@
         .nav-link.active { color: white; background-color: var(--primary); }
         .main-content { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
         .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); }
-        h2 { font-size: 20px; font-weight: 600; margin-top: 0; margin-bottom: 8px; text-align: center; }
+        h2 { font-size: 20px; font-weight: 600; margin: 0 0 8px 0; text-align: center; }
         .subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; font-weight: 500; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
@@ -65,7 +65,6 @@
             <div class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</div>
             <form id="fleetForm">
                 
-                <!-- เพิ่มฟิลด์เลือกชื่อพนักงานขับรถตามโจทย์ Digital HR -->
                 <div class="form-group">
                     <label for="driverName">ชื่อพนักงานขับรถ</label>
                     <select id="driverName" required>
@@ -78,7 +77,7 @@
 
                 <div class="form-group">
                     <label for="carId">รหัสพัสดุ / หมายเลขทะเบียนรถ</label>
-                    <input type="text" id="carId" list="carIdList" required placeholder="พิมพ์เอง หรือเลือกจากรายการที่มี">
+                    <input type="text" id="carId" list="carIdList" autocomplete="off" required placeholder="พิมพ์เอง หรือเลือกจากรายการที่มี">
                     <datalist id="carIdList"></datalist>
                     <span id="mileHint" class="hint-text"></span>
                 </div>
@@ -115,7 +114,7 @@
 
     <script>
         let editIndex = -1;
-        let lastOdometerValue = 0; // ตัวแปรเก็บเลขไมล์ล่าสุดเพื่อใช้ตรวจสอบ
+        let lastOdometerValue = 0; 
 
         window.onload = function() {
             updateCarIdDatalist();
@@ -158,12 +157,14 @@
             });
         }
 
-        // ฟังการกรอกรหัสรถเพื่อค้นหาเลขไมล์ล่าสุด
-        document.getElementById('carId').addEventListener('input', function() {
-            if (editIndex !== -1) return;
+        // ยุบฟังก์ชันดึงค่าล่าสุดมาไว้ในฟังก์ชันกลางเพื่อเรียกใช้ได้ครอบคลุม
+        function checkLatestCarStats() {
+            if (editIndex !== -1) return; // ข้ามขั้นตอนนี้หากอยู่ระหว่างโหมดแก้ไขข้อมูลเก่า
             
-            const carIdInput = this.value.trim();
+            const carIdInput = document.getElementById('carId').value.trim();
             let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            
+            // หาบันทึกอันล่าสุดจากอาร์เรย์ของทะเบียนนั้นๆ
             const lastRecord = fleetData.slice().reverse().find(item => item.carId === carIdInput);
             const hintSpan = document.getElementById('mileHint');
             
@@ -171,21 +172,23 @@
                 lastOdometerValue = parseFloat(lastRecord.currentOdometer);
                 hintSpan.innerText = `💡 พบบันทึกครั้งล่าสุด: ไมล์อยู่ที่ ${lastOdometerValue.toLocaleString()} กม.`;
                 
-                if(document.getElementById('carType').value !== lastRecord.carType){
-                    document.getElementById('carType').value = lastRecord.carType;
-                }
+                // ดึงประเภทรถคันนั้นมาล็อกค่าให้เลือกโดยอัตโนมัติเพิ่มความสะดวก
+                document.getElementById('carType').value = lastRecord.carType;
             } else {
                 lastOdometerValue = 0;
                 hintSpan.innerText = "";
             }
             validateOdometer();
-        });
+        }
 
-        // ฟังการกรอกเลขไมล์เพื่อตรวจสอบความถูกต้อง (Data Validation)
+        // บล็อกปัญหากดเลือกจากเมนูตัวช่วยพิมพ์ (Datalist) แล้วระบบตรวจจับไม่ทำงาน โดยผูกทั้ง input และ change
+        document.getElementById('carId').addEventListener('input', checkLatestCarStats);
+        document.getElementById('carId').addEventListener('change', checkLatestCarStats);
+
         document.getElementById('currentOdometer').addEventListener('input', validateOdometer);
 
         function validateOdometer() {
-            if (editIndex !== -1) return; // ข้ามการเช็กกรณีแก้ไขข้อมูลเก่า
+            if (editIndex !== -1) return; 
             
             const currentInput = parseFloat(document.getElementById('currentOdometer').value);
             const errorSpan = document.getElementById('mileError');
@@ -193,10 +196,10 @@
 
             if (currentInput && lastOdometerValue > 0 && currentInput < lastOdometerValue) {
                 errorSpan.style.display = 'block';
-                submitBtn.disabled = true; // บล็อกปุ่มไม่ให้กดส่ง
+                submitBtn.disabled = true; 
             } else {
                 errorSpan.style.display = 'none';
-                submitBtn.disabled = false; // ปลดบล็อกปุ่ม
+                submitBtn.disabled = false; 
             }
         }
 
@@ -226,9 +229,13 @@
 
             const alertBox = document.getElementById('successAlert');
             alertBox.style.display = 'block';
+            
+            // รีเซ็ตฟอร์ม พร้อมล้างตัวแปรไมล์สะสมล่าสุดทิ้ง เพื่อให้พิมพ์รถคันอื่นต่อได้ทันทีโดยระบบไม่เอ๋อ
             document.getElementById('fleetForm').reset();
             document.getElementById('mileHint').innerText = "";
             lastOdometerValue = 0;
+            document.getElementById('mileError').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
             
             updateCarIdDatalist();
             

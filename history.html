@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Fleet - ประวัติแจ้งเตือนซ่อมบำรุง</title>
+    <title>Smart Fleet - ประวัติการวิ่งรถ</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -12,37 +12,44 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
             --danger: #ef4444;
+            --success: #10b981;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
-        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .navbar-brand { font-size: 18px; font-weight: 700; }
         .nav-links { display: flex; gap: 10px; }
-        .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; }
+        .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
         .nav-link:hover { color: white; background-color: #1e293b; }
         .nav-link.active { color: white; background-color: var(--primary); }
-        .main-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .card { background: white; padding: 28px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); }
-        h2 { font-size: 22px; font-weight: 600; margin-top: 0; margin-bottom: 10px; }
-        p { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 14px 16px; text-align: left; font-size: 14px; }
-        th { background-color: #f1f5f9; color: var(--text-muted); font-weight: 600; border-bottom: 2px solid var(--border); }
-        td { border-bottom: 1px solid var(--border); }
-        .badge { padding: 6px 12px; border-radius: 6px; font-size: 12px; color: white; font-weight: 600; }
-        .bg-success { background-color: var(--success); }
-        .bg-warning { background-color: var(--warning); color: #0f172a; }
-        .bg-danger { background-color: var(--danger); }
-        .btn-delete { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 14px; font-weight: 600; }
-        .btn-delete:hover { text-decoration: underline; }
+        
+        .main-content { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        h2 { font-size: 22px; font-weight: 600; margin: 0; }
+        
+        .btn-group { display: flex; gap: 10px; }
+        .btn { padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; }
+        .btn-excel { background-color: var(--success); color: white; }
+        .btn-excel:hover { background-color: #059669; }
+        .btn-clear { background-color: #slate-200; color: var(--text-main); background-color: #e2e8f0; }
+        .btn-clear:hover { background-color: #cbd5e1; }
+        
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background-color: #f8fafc; padding: 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+        td { padding: 16px; border-bottom: 1px solid var(--border); color: var(--text-main); }
+        tr:last-child td { border-bottom: none; }
+        
+        .btn-action { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-block; margin-right: 4px; }
+        .btn-edit { background-color: #f59e0b; color: #0f172a; }
+        .btn-delete { background-color: var(--danger); color: white; }
+        .no-data { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="navbar-brand">🚚 Smart Fleet Analytics</div>
+        <div class="navbar-brand">📊 Smart Fleet Analytics</div>
         <div class="nav-links">
             <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
             <a href="history.html" class="nav-link active">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
@@ -50,82 +57,116 @@
             <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
         </div>
     </nav>
-    
-    <div class="main-container">
-        <div class="card">
-            <h2>📋 ประวัติการวิ่งและระบบวิเคราะห์แจ้งเตือน</h2>
-            <p>ประวัติบันทึกกิจกรรมรายวันและระบบตรวจสุขภาพรถยนต์อัตโนมัติจากข้อมูลเลขไมล์</p>
-            
-            <div style="width: 100%; overflow-x: auto;">
-                <table id="logsTable">
-                    <thead>
-                        <tr>
-                            <th>วันที่บันทึก</th>
-                            <th>ทะเบียนรถ</th>
-                            <th>ประเภทรถ</th>
-                            <th>เลขไมล์ปัจจุบัน</th>
-                            <th>ประหยัดน้ำมัน (กม./ลิตร)</th>
-                            <th>สถานะการบำรุงรักษา</th>
-                            <th>การดำเนินการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
+
+    <div class="main-content">
+        <div class="header-box">
+            <div>
+                <h2>📋 ประวัติการใช้งานรถและอัตราสิ้นเปลืองน้ำมัน</h2>
+                <span style="font-size: 13px; color: var(--text-muted);">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span>
             </div>
+            <div class="btn-group">
+                <button class="btn btn-excel" onclick="exportToCSV()">📥 ดาวน์โหลดรายงาน (Excel/CSV)</button>
+                <button class="btn btn-clear" onclick="clearAllLogs()">🗑️ ล้างประวัติทั้งหมด</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="logTable">
+                <thead>
+                    <tr>
+                        <th>วันที่บันทึก</th>
+                        <th>ชื่อพนักงานขับรถ</th>
+                        <th>หมายเลขทะเบียนรถ</th>
+                        <th>ประเภทรถยนต์</th>
+                        <th>เลขไมล์ปัจจุบัน (กม.)</th>
+                        <th>ระยะทาง (กม.)</th>
+                        <th>น้ำมันที่ใช้ (ลิตร)</th>
+                        <th>อัตราสิ้นเปลือง (กม./ลิตร)</th>
+                        <th>จัดการข้อมูล</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        function loadLogs() {
-            const tbody = document.querySelector('#logsTable tbody');
-            tbody.innerHTML = '';
-            
-            let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            
+        window.onload = function() {
+            renderTable();
+        };
+
+        function renderTable() {
+            const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = "";
+
             if (fleetData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">❌ ไม่พบข้อมูลประวัติในระบบ</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="no-data">❌ ยังไม่มีข้อมูลการบันทึกในระบบ</td></tr>`;
                 return;
             }
 
-            fleetData.forEach(function(item, index) {
-                let fuelBadge = '';
-                if (parseFloat(item.consumption) >= 12) {
-                    fuelBadge = `<span class="badge bg-success">${item.consumption} กม./ลิตร (ประหยัด)</span>`;
-                } else {
-                    fuelBadge = `<span class="badge bg-warning">${item.consumption} กม./ลิตร (กินน้ำมัน)</span>`;
-                }
-
-                let maintenanceBadge = `<span class="badge bg-success">✅ ปกติ</span>`;
-                if (item.currentOdometer >= 250000) {
-                    maintenanceBadge = `<span class="badge bg-danger">🚨 เกิน 2.5 แสนกม. (ควรเช็คใหญ่)</span>`;
-                } else if (item.currentOdometer % 10000 >= 9000) {
-                    maintenanceBadge = `<span class="badge bg-warning">⚠️ รอบเปลี่ยนน้ำมันเครื่อง</span>`;
-                }
-
-                const row = `<tr>
+            fleetData.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
                     <td>${item.date}</td>
-                    <td style="font-weight:600;">${item.carId}</td>
+                    <td style="font-weight: 600;">${item.driverName || '-'}</td>
+                    <td>${item.carId}</td>
                     <td>${item.carType}</td>
-                    <td>${item.currentOdometer.toLocaleString()} กม.</td>
-                    <td>${fuelBadge}</td>
-                    <td>${maintenanceBadge}</td>
-                    <td><button class="btn-delete" onclick="deleteLog(${index})">🗑️ ลบ</button></td>
-                </tr>`;
-                tbody.innerHTML += row;
+                    <td>${parseFloat(item.currentOdometer).toLocaleString()}</td>
+                    <td>${item.distance}</td>
+                    <td>${item.fuel}</td>
+                    <td style="font-weight: bold; color: var(--primary);">${item.consumption} กม./ลิตร</td>
+                    <td>
+                        <a href="index.html?edit=${index}" class="btn-action btn-edit">✏️ แก้ไข</a>
+                        <button onclick="deleteLog(${index})" class="btn-action btn-delete">🗑️ ลบ</button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
             });
         }
 
         function deleteLog(index) {
-            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบประวัติรายการนี้?')) {
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบประวัติแถวนี้?")) {
                 let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
                 fleetData.splice(index, 1);
                 localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
-                loadLogs();
+                renderTable();
             }
         }
 
-        window.onload = loadLogs;
+        function clearAllLogs() {
+            if (confirm("⚠️ เตือนภัย! คุณต้องการล้างข้อมูลประวัติทั้งหมดใช่หรือไม่? ข้อมูลจะหายไปถาวร")) {
+                localStorage.removeItem('fleetLogs');
+                renderTable();
+            }
+        }
+
+        // ฟังก์ชันดาวน์โหลดเป็นไฟล์ Excel/CSV รองรับภาษาไทยร้อยเปอร์เซ็นต์
+        function exportToCSV() {
+            const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            if (fleetData.length === 0) {
+                alert("ไม่มีข้อมูลสำหรับการดาวน์โหลด");
+                return;
+            }
+
+            let csvContent = "\uFEFF"; // ใส่ BOM ป้องกันสระภาษาไทยเพี้ยนใน Excel
+            csvContent += "วันที่บันทึก,ชื่อพนักงานขับรถ,หมายเลขทะเบียนรถ,ประเภทรถยนต์,เลขไมล์ปัจจุบัน(กม.),ระยะทาง(กม.),น้ำมันที่ใช้(ลิตร),อัตราสิ้นเปลือง(กม./ลิตร)\n";
+
+            fleetData.forEach(item => {
+                csvContent += `"${item.date}","${item.driverName || '-'}","${item.carId}","${item.carType}",${item.currentOdometer},${item.distance},${item.fuel},${item.consumption}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "รายงานการใช้รถ_หน่วยงานอำนวยความปลอดภัย.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>

@@ -13,31 +13,34 @@
             --warning: #f59e0b; --danger: #ef4444;
         }
         * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--background); color: var(--text-main); margin: 0; padding: 0; }
-        .navbar { background: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--background); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+        .navbar { background: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; flex-wrap: wrap; gap: 10px; }
         .navbar-brand { font-size: 18px; font-weight: 700; }
         .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
         .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
         .nav-link:hover { color: white; background: #1e293b; }
         .nav-link.active { color: white; background: var(--primary); }
 
-        .main-content { padding: 40px 20px; max-width: 500px; margin: 0 auto; }
-        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15,23,42,0.04); border: 1px solid var(--border); }
-        h2 { font-size: 20px; font-weight: 600; margin: 0 0 8px 0; text-align: center; }
-        .subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; font-weight: 500; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fcfdfe; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .main-content { padding: 40px 20px; max-width: 520px; margin: 0 auto; flex: 1; width: 100%; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(15,23,42,0.06); border: 1px solid var(--border); }
+        h2 { font-size: 20px; font-weight: 700; margin: 0 0 6px 0; text-align: center; }
+        .subtitle { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 26px; font-weight: 500; display: block; }
+
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 7px; font-weight: 600; font-size: 13px; color: var(--text-main); }
+        .label-optional { font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+        input, select, textarea { width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fcfdfe; color: var(--text-main); font-family: inherit; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); background: #fff; }
+        textarea { resize: vertical; min-height: 72px; }
 
         /* Dropdown */
         .dropdown-wrapper { position: relative; }
-        .dropdown-input { width: 100%; padding: 12px 40px 12px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fcfdfe; cursor: pointer; }
+        .dropdown-input { width: 100%; padding: 11px 38px 11px 13px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #fcfdfe; cursor: pointer; }
         .dropdown-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-        .dropdown-arrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-muted); font-size: 12px; }
-        .dropdown-list { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(15,23,42,0.1); z-index: 999; max-height: 240px; overflow-y: auto; }
+        .dropdown-arrow { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-muted); font-size: 11px; }
+        .dropdown-list { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(15,23,42,0.1); z-index: 999; max-height: 230px; overflow-y: auto; }
         .dropdown-list.open { display: block; }
-        .dropdown-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+        .dropdown-item { padding: 11px 15px; cursor: pointer; border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
         .dropdown-item:last-child { border-bottom: none; }
         .dropdown-item:hover { background: #eef2ff; }
         .dropdown-item .car-id { font-weight: 700; color: var(--primary); font-size: 14px; }
@@ -47,24 +50,38 @@
         .badge-repair { display: inline-block; background: #fee2e2; color: #b91c1c; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 8px; margin-left: 6px; }
 
         /* Car type display */
-        .cartype-display { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #f1f5f9; color: var(--text-muted); font-style: italic; }
+        .cartype-display { width: 100%; padding: 11px 13px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: #f1f5f9; color: var(--text-muted); font-style: italic; }
         .cartype-display.filled { background: #ecfdf5; color: #065f46; font-style: normal; font-weight: 600; border-color: #6ee7b7; }
 
         /* Auto calc */
-        .calc-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .calc-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
         .badge-auto { font-size: 11px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
-        .auto-calc-box { width: 100%; padding: 12px; border: 1.5px dashed var(--primary); border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--primary); background: #eef2ff; }
+        .auto-calc-box { width: 100%; padding: 11px 13px; border: 1.5px dashed var(--primary); border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--primary); background: #eef2ff; }
 
-        button { color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 600; transition: all 0.2s; margin-top: 10px; }
-        button:disabled { background: #cbd5e1; cursor: not-allowed; color: #94a3b8; }
-        .btn-submit { background: var(--primary); }
+        /* Divider */
+        .form-divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+        /* Buttons */
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 700; transition: all 0.2s; margin-top: 6px; }
         .btn-submit:hover:not(:disabled) { background: var(--primary-hover); }
-        .btn-update { background: var(--warning); color: #0f172a; }
+        .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; color: #94a3b8; }
+        .btn-update { background: var(--warning); color: #0f172a; border: none; padding: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 15px; font-weight: 700; margin-top: 6px; }
 
-        .alert-success { background: #ecfdf5; color: #065f46; padding: 12px; border-radius: 8px; border: 1px solid #a7f3d0; margin-bottom: 15px; text-align: center; font-size: 14px; display: none; }
+        /* Alerts */
+        .alert-success { background: #ecfdf5; color: #065f46; padding: 12px; border-radius: 8px; border: 1px solid #a7f3d0; margin-bottom: 15px; text-align: center; font-size: 14px; display: none; font-weight: 600; }
         .alert-repair { background: #fef2f2; color: #b91c1c; padding: 12px; border-radius: 8px; border: 1px solid #fca5a5; margin-bottom: 15px; text-align: center; font-size: 14px; font-weight: 600; display: none; }
-        .hint-text { font-size: 12px; color: var(--primary); margin-top: 6px; display: block; font-weight: 500; }
-        .error-text { font-size: 12px; color: var(--danger); margin-top: 6px; display: none; font-weight: 600; }
+        .hint-text { font-size: 12px; color: var(--primary); margin-top: 5px; display: block; font-weight: 500; }
+        .error-text { font-size: 12px; color: var(--danger); margin-top: 5px; display: none; font-weight: 600; }
+
+        /* Footer */
+        footer { background: #0f172a; color: #64748b; text-align: center; padding: 18px; font-size: 13px; margin-top: auto; }
+        footer span { color: #94a3b8; }
+
+        @media (max-width: 600px) {
+            .main-content { padding: 24px 12px; }
+            .card { padding: 20px; }
+            .navbar { padding: 12px 16px; }
+        }
     </style>
 </head>
 <body>
@@ -72,23 +89,25 @@
 <nav class="navbar">
     <div class="navbar-brand">📊 Smart Fleet Analytics</div>
     <div class="nav-links">
-        <a href="index.html" class="nav-link active">📝 บันทึกข้อมูลการวิ่งรถ</a>
-        <a href="history.html" class="nav-link">📋 ประวัติการวิ่งรถ</a>
-        <a href="database.html" class="nav-link">📊 Dashboard &amp; แจ้งซ่อมบำรุง</a>
+        <a href="index.html" class="nav-link active">📝 บันทึกข้อมูล</a>
+        <a href="history.html" class="nav-link">📋 ประวัติการวิ่ง</a>
+        <a href="database.html" class="nav-link">🗃️ คลังข้อมูล</a>
         <a href="manage.html" class="nav-link">🚗 จัดการรถ</a>
-        <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
+        <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนา</a>
     </div>
 </nav>
 
 <div class="main-content">
-    <div class="alert-success" id="successAlert">🎉 บันทึกข้อมูลสำเร็จ! และอัปเดตไปยังระบบคลังประวัติแล้ว</div>
-    <div class="alert-repair" id="repairAlert">🔧 รถคันนี้อยู่ระหว่างการซ่อมบำรุง ไม่สามารถบันทึกการวิ่งได้</div>
+    <div class="alert-success" id="successAlert">🎉 บันทึกข้อมูลสำเร็จแล้ว!</div>
+    <div class="alert-repair"  id="repairAlert">🔧 รถคันนี้อยู่ระหว่างซ่อมบำรุง ไม่สามารถบันทึกได้</div>
 
     <div class="card">
-        <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถและเลขไมล์</h2>
-        <div class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</div>
+        <h2 id="formTitle">📝 บันทึกข้อมูลการวิ่งรถ</h2>
+        <span class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span>
+
         <form id="fleetForm">
 
+            <!-- ชื่อคนขับ -->
             <div class="form-group">
                 <label>ชื่อพนักงานขับรถ</label>
                 <select id="driverName" required>
@@ -99,10 +118,17 @@
                 </select>
             </div>
 
+            <!-- วันที่ (เลือกได้) -->
+            <div class="form-group">
+                <label>วันที่บันทึก</label>
+                <input type="date" id="recordDate" required>
+            </div>
+
+            <!-- ทะเบียนรถ Dropdown -->
             <div class="form-group">
                 <label>รหัสพัสดุ / หมายเลขทะเบียนรถ</label>
                 <div class="dropdown-wrapper">
-                    <input type="text" class="dropdown-input" id="carIdInput" placeholder="พิมพ์หรือคลิกเพื่อเลือกทะเบียน..." autocomplete="off">
+                    <input type="text" class="dropdown-input" id="carIdInput" placeholder="พิมพ์หรือคลิกเพื่อเลือก..." autocomplete="off">
                     <span class="dropdown-arrow">▼</span>
                     <div class="dropdown-list" id="carDropdownList"></div>
                 </div>
@@ -110,30 +136,44 @@
                 <span id="mileHint" class="hint-text"></span>
             </div>
 
+            <!-- ประเภทรถ (auto) -->
             <div class="form-group">
                 <label>ประเภทรถยนต์</label>
                 <div class="cartype-display" id="carTypeDisplay">— (เลือกทะเบียนรถก่อน)</div>
                 <input type="hidden" id="carType">
             </div>
 
+            <hr class="form-divider">
+
+            <!-- เลขไมล์ -->
             <div class="form-group">
-                <label for="currentOdometer">เลขไมล์ปัจจุบัน (กิโลเมตร)</label>
+                <label>เลขไมล์ปัจจุบัน (กิโลเมตร)</label>
                 <input type="number" id="currentOdometer" min="1" required placeholder="เช่น 296709">
-                <span id="mileError" class="error-text">❌ เตือน: เลขไมล์ปัจจุบันน้อยกว่าเลขไมล์ล่าสุดของรถคันนี้!</span>
+                <span id="mileError" class="error-text">❌ เลขไมล์ปัจจุบันน้อยกว่าครั้งก่อน!</span>
             </div>
 
+            <!-- ระยะทาง (auto calc) -->
             <div class="form-group">
                 <div class="calc-label-row">
-                    <label style="margin:0">ระยะทางที่วิ่งในรอบนี้ (กิโลเมตร)</label>
+                    <label style="margin:0">ระยะทางที่วิ่งในรอบนี้ (กม.)</label>
                     <span class="badge-auto">⚡ คำนวณอัตโนมัติ</span>
                 </div>
                 <div class="auto-calc-box" id="distanceDisplay">— กม. (กรอกเลขไมล์ก่อน)</div>
                 <input type="hidden" id="distance">
             </div>
 
+            <!-- น้ำมัน -->
             <div class="form-group">
-                <label for="fuel">ปริมาณน้ำมันที่ใช้ในรอบนี้ (ลิตร) <span style="color:var(--text-muted);font-weight:400;">— ไม่บังคับ</span></label>
+                <label>ปริมาณน้ำมันที่ใช้ (ลิตร) <span class="label-optional">ไม่บังคับ</span></label>
                 <input type="number" id="fuel" min="0.1" step="0.1" placeholder="เช่น 10 (กรอกทีหลังได้)">
+            </div>
+
+            <hr class="form-divider">
+
+            <!-- หมายเหตุ (ใหม่) -->
+            <div class="form-group">
+                <label>หมายเหตุ / วัตถุประสงค์การเดินทาง <span class="label-optional">ไม่บังคับ</span></label>
+                <textarea id="remark" placeholder="เช่น ออกตรวจหน้างาน, รับส่งวัสดุ, ประชุมสำนักงาน..."></textarea>
             </div>
 
             <button type="submit" id="submitBtn" class="btn-submit">บันทึกข้อมูลและส่งรายงาน</button>
@@ -141,35 +181,12 @@
     </div>
 </div>
 
+<!-- Footer (ใหม่) -->
+<footer>
+    <span>© 2568 หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span> &nbsp;|&nbsp; Smart Fleet Analytics
+</footer>
+
 <script>
-    // === Seed ข้อมูลตัวอย่าง (รันครั้งเดียวตอนเปิดเว็บครั้งแรกในเบราว์เซอร์นี้) ===
-    (function seedDemoData() {
-        if (localStorage.getItem('fleetSeeded')) return; // เคย seed แล้ว ไม่ทำซ้ำ (เคารพการ "ล้างประวัติ" ของผู้ใช้)
-
-        const seedFleet = [
-            { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
-            { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
-            { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
-        ];
-
-        const seedLogs = [
-            { date: '11/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 296850, distance: 141, fuel: 12,   consumption: '11.75' },
-            { date: '17/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297005, distance: 155, fuel: 13,   consumption: '11.92' },
-            { date: '23/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297190, distance: 185, fuel: 15.5, consumption: '11.94' },
-
-            { date: '12/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168350, distance: 230, fuel: 28, consumption: '8.21' },
-            { date: '18/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168570, distance: 220, fuel: 27, consumption: '8.15' },
-            { date: '24/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168800, distance: 230, fuel: 29, consumption: '7.93' },
-
-            { date: '08/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192700, distance: 186, fuel: 31, consumption: '6.00' },
-            { date: '13/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192910, distance: 210, fuel: 33, consumption: '6.36' },
-        ];
-
-        localStorage.setItem('fleetMaster', JSON.stringify(seedFleet));
-        localStorage.setItem('fleetLogs', JSON.stringify(seedLogs));
-        localStorage.setItem('fleetSeeded', 'true');
-    })();
-
     const DEFAULT_FLEET = [
         { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
         { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
@@ -187,18 +204,35 @@
     let lastOdometerValue = 0;
     let selectedCarInRepair = false;
 
+    // ===== Set default date to today =====
+    function setDefaultDate() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm   = String(today.getMonth() + 1).padStart(2, '0');
+        const dd   = String(today.getDate()).padStart(2, '0');
+        document.getElementById('recordDate').value = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function formatDateThai(dateStr) {
+        if (!dateStr) return '';
+        const [yyyy, mm, dd] = dateStr.split('-');
+        return `${dd}/${mm}/${yyyy}`;
+    }
+
+    // ===== Dropdown =====
     const carIdInput  = document.getElementById('carIdInput');
     const carDropList = document.getElementById('carDropdownList');
 
     function buildDropdownItems(filter = '') {
         carDropList.innerHTML = '';
-        const fleet = getFleetMaster();
+        const fleet   = getFleetMaster();
         const keyword = filter.toLowerCase();
         let count = 0;
+
         fleet.forEach(car => {
             if (keyword && !car.id.toLowerCase().includes(keyword) && !car.type.toLowerCase().includes(keyword)) return;
-            const logs = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            const lastLog = logs.slice().reverse().find(l => l.carId === car.id);
+            const logs     = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+            const lastLog  = logs.slice().reverse().find(l => l.carId === car.id);
             const latestMile = lastLog ? parseFloat(lastLog.currentOdometer) : car.lastMile;
 
             const item = document.createElement('div');
@@ -207,15 +241,12 @@
                 <div class="car-id">${car.id}${car.inRepair ? '<span class="badge-repair">🔧 เข้าซ่อม</span>' : ''}</div>
                 <div class="car-meta">${car.type} &nbsp;|&nbsp; ไมล์ล่าสุด: ${latestMile.toLocaleString()} กม.</div>
             `;
-            if (!car.inRepair) {
-                item.addEventListener('mousedown', e => { e.preventDefault(); selectCar(car); });
-            }
+            if (!car.inRepair) item.addEventListener('mousedown', e => { e.preventDefault(); selectCar(car); });
             carDropList.appendChild(item);
             count++;
         });
-        if (count === 0) {
-            carDropList.innerHTML = '<div class="dropdown-item" style="color:var(--text-muted);cursor:default;">ไม่พบทะเบียนที่ค้นหา</div>';
-        }
+
+        if (count === 0) carDropList.innerHTML = '<div class="dropdown-item" style="color:var(--text-muted);cursor:default;">ไม่พบทะเบียนที่ค้นหา</div>';
     }
 
     function selectCar(car) {
@@ -228,10 +259,9 @@
         typeDisplay.className = 'cartype-display filled';
         document.getElementById('carType').value = car.type;
 
-        const logs = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+        const logs   = JSON.parse(localStorage.getItem('fleetLogs')) || [];
         const lastLog = logs.slice().reverse().find(l => l.carId === car.id);
         lastOdometerValue = lastLog ? parseFloat(lastLog.currentOdometer) : car.lastMile;
-
         document.getElementById('mileHint').innerText = `💡 เลขไมล์ครั้งก่อน: ${lastOdometerValue.toLocaleString()} กม.`;
 
         selectedCarInRepair = car.inRepair;
@@ -244,15 +274,16 @@
     carIdInput.addEventListener('input', () => { buildDropdownItems(carIdInput.value); carDropList.classList.add('open'); });
     carIdInput.addEventListener('blur',  () => { setTimeout(() => carDropList.classList.remove('open'), 150); });
 
+    // ===== Odometer Validate + Auto Calc =====
     document.getElementById('currentOdometer').addEventListener('input', validateAndCalc);
 
     function validateAndCalc() {
         if (editIndex !== -1) return;
         const cur = parseFloat(document.getElementById('currentOdometer').value);
-        const errorSpan = document.getElementById('mileError');
+        const errorSpan  = document.getElementById('mileError');
         const distDisplay = document.getElementById('distanceDisplay');
-        const distHidden = document.getElementById('distance');
-        const submitBtn = document.getElementById('submitBtn');
+        const distHidden  = document.getElementById('distance');
+        const submitBtn   = document.getElementById('submitBtn');
 
         if (!cur) { distDisplay.innerText = '— กม. (กรอกเลขไมล์ก่อน)'; distHidden.value = ''; return; }
 
@@ -272,28 +303,34 @@
         }
     }
 
+    // ===== Submit =====
     document.getElementById('fleetForm').addEventListener('submit', function(e) {
         e.preventDefault();
         if (selectedCarInRepair) return;
 
-        const driverName = document.getElementById('driverName').value;
-        const carId = document.getElementById('carId').value.trim();
-        const carType = document.getElementById('carType').value;
+        const driverName      = document.getElementById('driverName').value;
+        const carId           = document.getElementById('carId').value.trim();
+        const carType         = document.getElementById('carType').value;
         const currentOdometer = parseFloat(document.getElementById('currentOdometer').value);
-        const distance = parseFloat(document.getElementById('distance').value) || 0;
-        const fuelVal = document.getElementById('fuel').value;
-        const fuel = fuelVal ? parseFloat(fuelVal) : null;
-        const consumption = (fuel && distance > 0) ? (distance / fuel).toFixed(2) : '—';
-        const date = new Date().toLocaleDateString('th-TH');
+        const distance        = parseFloat(document.getElementById('distance').value) || 0;
+        const fuelVal         = document.getElementById('fuel').value;
+        const fuel            = fuelVal ? parseFloat(fuelVal) : null;
+        const consumption     = (fuel && distance > 0) ? (distance / fuel).toFixed(2) : '—';
+        const remark          = document.getElementById('remark').value.trim();
+        const dateRaw         = document.getElementById('recordDate').value;
+        const date            = formatDateThai(dateRaw);
 
         let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-        const record = { date, driverName, carId, carType, currentOdometer, distance, fuel: fuel ?? '—', consumption };
+        const record = { date, driverName, carId, carType, currentOdometer, distance, fuel: fuel ?? '—', consumption, remark };
+
         if (editIndex === -1) fleetData.push(record);
         else fleetData[editIndex] = record;
         localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
 
+        // Reset
         document.getElementById('successAlert').style.display = 'block';
         document.getElementById('fleetForm').reset();
+        setDefaultDate();
         carIdInput.value = '';
         document.getElementById('carId').value = '';
         const td = document.getElementById('carTypeDisplay');
@@ -306,11 +343,13 @@
         document.getElementById('repairAlert').style.display = 'none';
         lastOdometerValue = 0; selectedCarInRepair = false;
 
-        if (editIndex !== -1) setTimeout(() => { window.location.href = 'history.html'; }, 1500);
+        if (editIndex !== -1) setTimeout(() => { window.location.href = 'history.html'; }, 1200);
         else setTimeout(() => { document.getElementById('successAlert').style.display = 'none'; }, 3000);
     });
 
+    // ===== Edit Mode =====
     window.onload = function() {
+        setDefaultDate();
         const urlParams = new URLSearchParams(window.location.search);
         const editId = urlParams.get('edit');
         if (editId !== null) {
@@ -319,6 +358,13 @@
             if (fleetData[editIndex]) {
                 const item = fleetData[editIndex];
                 document.getElementById('driverName').value = item.driverName || '';
+
+                // แปลงวันที่ไทย dd/mm/yyyy → yyyy-mm-dd สำหรับ input type date
+                if (item.date) {
+                    const parts = item.date.split('/');
+                    if (parts.length === 3) document.getElementById('recordDate').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                }
+
                 carIdInput.value = item.carId;
                 document.getElementById('carId').value = item.carId;
                 const td = document.getElementById('carTypeDisplay');
@@ -328,6 +374,8 @@
                 document.getElementById('distance').value = item.distance;
                 document.getElementById('distanceDisplay').innerText = parseFloat(item.distance).toLocaleString() + ' กม. (ข้อมูลเดิม)';
                 if (item.fuel !== '—') document.getElementById('fuel').value = item.fuel;
+                document.getElementById('remark').value = item.remark || '';
+
                 document.getElementById('formTitle').innerText = '✏️ แก้ไขรายงานข้อมูลรถ ' + item.carId;
                 const btn = document.getElementById('submitBtn');
                 btn.innerText = 'อัปเดตข้อมูลการแก้ไข';

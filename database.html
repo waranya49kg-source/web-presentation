@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Fleet - Dashboard</title>
+    <title>Smart Fleet - คลังข้อมูลยานพาหนะ</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <style>
         :root {
@@ -23,46 +23,55 @@
         .main-content { padding: 36px 24px; max-width: 1100px; margin: 0 auto; }
         h2 { font-size: 22px; font-weight: 700; margin: 0 0 4px 0; }
         .subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; display: block; }
+        .section-title { font-size: 16px; font-weight: 700; margin: 32px 0 14px 0; color: var(--text-main); }
 
         /* Summary Cards */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
         .summary-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
-        .summary-card .icon { font-size: 28px; margin-bottom: 10px; }
-        .summary-card .value { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; }
-        .summary-card .unit { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+        .summary-card .icon { font-size: 26px; margin-bottom: 10px; }
+        .summary-card .value { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1; }
+        .summary-card .unit { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
         .summary-card .label { font-size: 13px; color: var(--text-muted); margin-top: 8px; font-weight: 500; }
         .summary-card.green .value { color: var(--success); }
         .summary-card.orange .value { color: var(--warning); }
-        .summary-card.red .value { color: var(--danger); }
 
-        /* Charts Grid */
-        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-        .chart-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
-        .chart-card.full { grid-column: 1 / -1; }
-        .chart-title { font-size: 15px; font-weight: 700; margin: 0 0 20px 0; color: var(--text-main); }
-        .chart-wrap { position: relative; height: 240px; }
-
-        /* Maintenance Alert */
-        .alert-section { margin-bottom: 24px; }
-        .alert-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+        /* Maintenance */
         .alert-row { display: flex; align-items: center; gap: 12px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 18px; margin-bottom: 8px; }
         .alert-row.danger { background: #fef2f2; border-color: #fca5a5; }
-        .alert-row .car-id { font-weight: 700; color: var(--primary); min-width: 130px; }
+        .alert-row.ok { background: #f0fdf4; border-color: #86efac; }
+        .alert-row .car-id { font-weight: 700; color: var(--primary); min-width: 130px; font-size: 14px; }
         .alert-row .progress-wrap { flex: 1; }
         .progress-bar-bg { background: #e2e8f0; border-radius: 8px; height: 8px; overflow: hidden; }
-        .progress-bar-fill { height: 8px; border-radius: 8px; background: var(--warning); transition: width 0.4s; }
+        .progress-bar-fill { height: 8px; border-radius: 8px; background: var(--warning); }
         .progress-bar-fill.danger { background: var(--danger); }
-        .alert-row .mile-text { font-size: 13px; color: var(--text-muted); min-width: 120px; text-align: right; }
+        .progress-bar-fill.ok { background: var(--success); }
+        .alert-row .mile-text { font-size: 13px; color: var(--text-muted); min-width: 140px; text-align: right; }
 
-        /* No data */
-        .no-data-box { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .no-data-box .icon { font-size: 48px; margin-bottom: 12px; }
-        .no-data-box a { color: var(--primary); font-weight: 600; }
+        /* Charts */
+        .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
+        .chart-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+        .chart-card.full { grid-column: 1 / -1; }
+        .chart-title { font-size: 14px; font-weight: 700; margin: 0 0 18px 0; }
+        .chart-wrap { position: relative; height: 230px; }
+
+        /* Table */
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background: #f8fafc; padding: 14px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+        td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        .badge-ok { background: #d1fae5; color: #065f46; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-warn { background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-repair { background: #fee2e2; color: #b91c1c; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .no-data { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
 
         @media (max-width: 640px) {
             .charts-grid { grid-template-columns: 1fr; }
             .chart-card.full { grid-column: 1; }
         }
+
+        footer { background: #0f172a; color: #64748b; text-align: center; padding: 18px; font-size: 13px; margin-top: 32px; }
+        footer span { color: #94a3b8; }
     </style>
 </head>
 <body>
@@ -71,236 +80,220 @@
     <div class="navbar-brand">📊 Smart Fleet Analytics</div>
     <div class="nav-links">
         <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
-        <a href="history.html" class="nav-link">📋 ประวัติการวิ่งรถ</a>
-        <a href="database.html" class="nav-link">📊 Dashboard &amp; แจ้งซ่อมบำรุง</a>
+        <a href="history.html" class="nav-link">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
+        <a href="database.html" class="nav-link active">🗃️ คลังข้อมูลยานพาหนะ</a>
         <a href="manage.html" class="nav-link">🚗 จัดการรถ</a>
         <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
     </div>
 </nav>
 
 <div class="main-content">
-    <h2>📊 Dashboard ภาพรวมการใช้งานรถ</h2>
+    <h2>🗃️ คลังข้อมูลยานพาหนะและ Dashboard</h2>
     <span class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span>
 
-    <div id="noDataBox" class="no-data-box" style="display:none;">
-        <div class="icon">📭</div>
-        <div style="font-size:16px;font-weight:600;margin-bottom:8px;">ยังไม่มีข้อมูลในระบบ</div>
-        <div>กรุณา<a href="index.html"> บันทึกข้อมูลการวิ่งรถ </a>ก่อนเพื่อดู Dashboard</div>
+    <!-- Summary Cards -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="icon">🚗</div>
+            <div class="value" id="totalTrips">—</div>
+            <div class="label">รอบการวิ่งทั้งหมด</div>
+        </div>
+        <div class="summary-card green">
+            <div class="icon">📍</div>
+            <div class="value" id="totalDistance">—</div>
+            <div class="unit">กิโลเมตร</div>
+            <div class="label">ระยะทางสะสมทั้งหมด</div>
+        </div>
+        <div class="summary-card orange">
+            <div class="icon">⛽</div>
+            <div class="value" id="avgConsumption">—</div>
+            <div class="unit">กม./ลิตร</div>
+            <div class="label">อัตราสิ้นเปลืองเฉลี่ย</div>
+        </div>
+        <div class="summary-card">
+            <div class="icon">🏆</div>
+            <div class="value" id="topCar" style="font-size:15px;margin-top:4px;">—</div>
+            <div class="label">รถที่วิ่งมากที่สุด</div>
+        </div>
     </div>
 
-    <div id="dashContent">
-        <!-- Summary Cards -->
-        <div class="summary-grid">
-            <div class="summary-card">
-                <div class="icon">🚗</div>
-                <div class="value" id="totalTrips">—</div>
-                <div class="label">รอบการวิ่งทั้งหมด</div>
-            </div>
-            <div class="summary-card green">
-                <div class="icon">📍</div>
-                <div class="value" id="totalDistance">—</div>
-                <div class="unit">กิโลเมตร</div>
-                <div class="label">ระยะทางสะสมทั้งหมด</div>
-            </div>
-            <div class="summary-card orange">
-                <div class="icon">⛽</div>
-                <div class="value" id="avgConsumption">—</div>
-                <div class="unit">กม./ลิตร</div>
-                <div class="label">อัตราสิ้นเปลืองเฉลี่ย</div>
-            </div>
-            <div class="summary-card">
-                <div class="icon">🏆</div>
-                <div class="value" id="topCar" style="font-size:16px;margin-top:4px;">—</div>
-                <div class="label">รถที่วิ่งมากที่สุด</div>
-            </div>
-        </div>
+    <!-- Maintenance -->
+    <div class="section-title">⚠️ สถานะการบำรุงรักษา (ทุก 10,000 กม.)</div>
+    <div id="maintenanceList" style="margin-bottom: 28px;"></div>
 
-        <!-- Maintenance Alerts -->
-        <div class="alert-section" id="maintenanceSection">
-            <div class="alert-title">⚠️ สถานะการบำรุงรักษา (ทุก 10,000 กม.)</div>
-            <div id="maintenanceList"></div>
+    <!-- Charts -->
+    <div class="section-title">📊 กราฟวิเคราะห์การใช้งาน</div>
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-title">📦 ระยะทางสะสมแต่ละคัน (กม.)</div>
+            <div class="chart-wrap"><canvas id="chartDistance"></canvas></div>
         </div>
+        <div class="chart-card">
+            <div class="chart-title">⛽ อัตราสิ้นเปลืองแต่ละคัน (กม./ลิตร)</div>
+            <div class="chart-wrap"><canvas id="chartConsumption"></canvas></div>
+        </div>
+        <div class="chart-card full">
+            <div class="chart-title">📈 ระยะทางรายรอบ (ตามลำดับเวลา)</div>
+            <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
+        </div>
+    </div>
 
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-title">📦 ระยะทางสะสมแต่ละคัน (กม.)</div>
-                <div class="chart-wrap"><canvas id="chartDistance"></canvas></div>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">⛽ อัตราสิ้นเปลืองแต่ละคัน (กม./ลิตร)</div>
-                <div class="chart-wrap"><canvas id="chartConsumption"></canvas></div>
-            </div>
-            <div class="chart-card full">
-                <div class="chart-title">📈 ระยะทางรายรอบ (ตามลำดับเวลา)</div>
-                <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
-            </div>
-        </div>
+    <!-- Vehicle Table -->
+    <div class="section-title">🚘 สถานะล่าสุดรายคัน</div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>หมายเลขทะเบียนรถ</th>
+                    <th>ประเภทรถยนต์</th>
+                    <th>เลขไมล์สะสมล่าสุด (กม.)</th>
+                    <th>ผู้ขับขี่ใช้งานล่าสุด</th>
+                    <th>สถานะ</th>
+                </tr>
+            </thead>
+            <tbody id="dbTableBody"></tbody>
+        </table>
     </div>
 </div>
 
 <script>
-    // === Seed ข้อมูลตัวอย่าง (รันครั้งเดียวตอนเปิดเว็บครั้งแรกในเบราว์เซอร์นี้) ===
-    (function seedDemoData() {
-        if (localStorage.getItem('fleetSeeded')) return; // เคย seed แล้ว ไม่ทำซ้ำ (เคารพการ "ล้างประวัติ" ของผู้ใช้)
-
-        const seedFleet = [
-            { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
-            { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
-            { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
-        ];
-
-        const seedLogs = [
-            { date: '11/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 296850, distance: 141, fuel: 12,   consumption: '11.75' },
-            { date: '17/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297005, distance: 155, fuel: 13,   consumption: '11.92' },
-            { date: '23/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297190, distance: 185, fuel: 15.5, consumption: '11.94' },
-
-            { date: '12/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168350, distance: 230, fuel: 28, consumption: '8.21' },
-            { date: '18/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168570, distance: 220, fuel: 27, consumption: '8.15' },
-            { date: '24/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168800, distance: 230, fuel: 29, consumption: '7.93' },
-
-            { date: '08/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192700, distance: 186, fuel: 31, consumption: '6.00' },
-            { date: '13/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192910, distance: 210, fuel: 33, consumption: '6.36' },
-        ];
-
-        localStorage.setItem('fleetMaster', JSON.stringify(seedFleet));
-        localStorage.setItem('fleetLogs', JSON.stringify(seedLogs));
-        localStorage.setItem('fleetSeeded', 'true');
-    })();
-
-    const MAINTENANCE_INTERVAL = 10000; // กม.
+    const MAINTENANCE_INTERVAL = 10000;
+    const DEFAULT_FLEET = [
+        { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
+        { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
+        { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
+    ];
 
     function getFleetMaster() {
         const saved = localStorage.getItem('fleetMaster');
         if (saved) return JSON.parse(saved);
-        return [
-            { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
-            { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
-            { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
-        ];
+        localStorage.setItem('fleetMaster', JSON.stringify(DEFAULT_FLEET));
+        return DEFAULT_FLEET;
     }
 
-    function renderDashboard() {
-        const logs = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-
-        if (logs.length === 0) {
-            document.getElementById('noDataBox').style.display = 'block';
-            document.getElementById('dashContent').style.display = 'none';
-            return;
-        }
-
+    window.onload = function() {
+        const logs  = JSON.parse(localStorage.getItem('fleetLogs')) || [];
         const fleet = getFleetMaster();
 
-        // --- Summary ---
-        const totalTrips = logs.length;
+        // --- Summary Cards ---
+        const totalTrips    = logs.length;
         const totalDistance = logs.reduce((s, l) => s + (parseFloat(l.distance) || 0), 0);
-
-        const logsWithFuel = logs.filter(l => l.consumption !== '—' && !isNaN(parseFloat(l.consumption)));
+        const logsWithFuel  = logs.filter(l => l.consumption !== '—' && !isNaN(parseFloat(l.consumption)));
         const avgConsumption = logsWithFuel.length > 0
             ? (logsWithFuel.reduce((s, l) => s + parseFloat(l.consumption), 0) / logsWithFuel.length).toFixed(1)
             : '—';
+        const distByCar = {};
+        logs.forEach(l => { distByCar[l.carId] = (distByCar[l.carId] || 0) + (parseFloat(l.distance) || 0); });
+        const topCarId = Object.keys(distByCar).sort((a, b) => distByCar[b] - distByCar[a])[0] || '—';
 
-        // รถที่วิ่งมากที่สุด
-        const distBycar = {};
-        logs.forEach(l => { distBycar[l.carId] = (distBycar[l.carId] || 0) + (parseFloat(l.distance) || 0); });
-        const topCarId = Object.keys(distBycar).sort((a, b) => distBycar[b] - distBycar[a])[0] || '—';
-
-        document.getElementById('totalTrips').innerText = totalTrips.toLocaleString();
-        document.getElementById('totalDistance').innerText = totalDistance.toLocaleString();
+        document.getElementById('totalTrips').innerText     = totalTrips.toLocaleString();
+        document.getElementById('totalDistance').innerText  = totalDistance.toLocaleString();
         document.getElementById('avgConsumption').innerText = avgConsumption;
-        document.getElementById('topCar').innerText = topCarId;
+        document.getElementById('topCar').innerText         = topCarId;
 
         // --- Maintenance Progress ---
         const mainList = document.getElementById('maintenanceList');
-        mainList.innerHTML = '';
         fleet.forEach(car => {
-            const lastLog = logs.slice().reverse().find(l => l.carId === car.id);
+            const lastLog     = logs.slice().reverse().find(l => l.carId === car.id);
             const currentMile = lastLog ? parseFloat(lastLog.currentOdometer) : car.lastMile;
-            const baseMile = Math.floor(car.lastMile / MAINTENANCE_INTERVAL) * MAINTENANCE_INTERVAL;
+            const baseMile    = Math.floor(car.lastMile / MAINTENANCE_INTERVAL) * MAINTENANCE_INTERVAL;
             const nextService = baseMile + MAINTENANCE_INTERVAL;
-            const used = currentMile - baseMile;
-            const pct = Math.min((used / MAINTENANCE_INTERVAL) * 100, 100);
-            const remaining = nextService - currentMile;
-            const isDanger = pct >= 80;
+            const used        = currentMile - baseMile;
+            const pct         = Math.min((used / MAINTENANCE_INTERVAL) * 100, 100);
+            const remaining   = nextService - currentMile;
+            const isDanger    = pct >= 80;
+            const isOk        = pct < 50;
 
             const row = document.createElement('div');
-            row.className = 'alert-row' + (isDanger ? ' danger' : '');
+            row.className = 'alert-row' + (car.inRepair ? ' danger' : isDanger ? ' danger' : isOk ? ' ok' : '');
             row.innerHTML = `
                 <div class="car-id">${car.id}</div>
                 <div class="progress-wrap">
                     <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px;">${car.type}</div>
                     <div class="progress-bar-bg">
-                        <div class="progress-bar-fill ${isDanger ? 'danger' : ''}" style="width:${pct}%"></div>
+                        <div class="progress-bar-fill ${car.inRepair ? 'danger' : isDanger ? 'danger' : isOk ? 'ok' : ''}" style="width:${car.inRepair ? 100 : pct}%"></div>
                     </div>
                 </div>
                 <div class="mile-text">
-                    ${remaining > 0
-                        ? `เหลือ <strong>${remaining.toLocaleString()} กม.</strong>`
-                        : `<strong style="color:var(--danger)">⚠️ ถึงรอบซ่อมแล้ว!</strong>`}
+                    ${car.inRepair
+                        ? `<strong style="color:var(--danger)">🔧 อยู่ระหว่างซ่อม</strong>`
+                        : remaining > 0
+                            ? `เหลือ <strong>${remaining.toLocaleString()} กม.</strong>`
+                            : `<strong style="color:var(--danger)">⚠️ ถึงรอบซ่อมแล้ว!</strong>`}
                 </div>
             `;
             mainList.appendChild(row);
         });
 
-        // --- Chart 1: ระยะทางสะสมแต่ละคัน ---
+        // --- Charts ---
         const carIds = [...new Set(logs.map(l => l.carId))];
-        const distPerCar = carIds.map(id => logs.filter(l => l.carId === id).reduce((s, l) => s + (parseFloat(l.distance) || 0), 0));
+        const palette = ['#4f46e5','#10b981','#f59e0b','#ef4444','#8b5cf6'];
 
+        // กราฟแท่ง: ระยะทางสะสม
+        const distPerCar = carIds.map(id => logs.filter(l => l.carId === id).reduce((s, l) => s + (parseFloat(l.distance) || 0), 0));
         new Chart(document.getElementById('chartDistance'), {
             type: 'bar',
-            data: {
-                labels: carIds,
-                datasets: [{ label: 'ระยะทาง (กม.)', data: distPerCar, backgroundColor: ['#4f46e5','#10b981','#f59e0b'], borderRadius: 8, borderSkipped: false }]
-            },
+            data: { labels: carIds, datasets: [{ data: distPerCar, backgroundColor: palette, borderRadius: 8, borderSkipped: false }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
         });
 
-        // --- Chart 2: อัตราสิ้นเปลืองแต่ละคัน ---
+        // กราฟแท่ง: อัตราสิ้นเปลือง
         const avgPerCar = carIds.map(id => {
-            const filtered = logs.filter(l => l.carId === id && l.consumption !== '—' && !isNaN(parseFloat(l.consumption)));
-            if (filtered.length === 0) return 0;
-            return parseFloat((filtered.reduce((s, l) => s + parseFloat(l.consumption), 0) / filtered.length).toFixed(1));
+            const f = logs.filter(l => l.carId === id && l.consumption !== '—' && !isNaN(parseFloat(l.consumption)));
+            return f.length ? parseFloat((f.reduce((s, l) => s + parseFloat(l.consumption), 0) / f.length).toFixed(1)) : 0;
         });
-
         new Chart(document.getElementById('chartConsumption'), {
             type: 'bar',
-            data: {
-                labels: carIds,
-                datasets: [{ label: 'กม./ลิตร', data: avgPerCar, backgroundColor: ['#4f46e5','#10b981','#f59e0b'], borderRadius: 8, borderSkipped: false }]
-            },
+            data: { labels: carIds, datasets: [{ data: avgPerCar, backgroundColor: palette, borderRadius: 8, borderSkipped: false }] },
             options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
         });
 
-        // --- Chart 3: ระยะทางรายรอบ (timeline) ---
-        const colors = { };
-        const palette = ['#4f46e5','#10b981','#f59e0b','#ef4444','#8b5cf6'];
-        carIds.forEach((id, i) => { colors[id] = palette[i % palette.length]; });
-
-        const datasets = carIds.map(id => ({
+        // กราฟเส้น: timeline
+        const datasets = carIds.map((id, i) => ({
             label: id,
             data: logs.filter(l => l.carId === id).map(l => ({ x: l.date, y: parseFloat(l.distance) || 0 })),
-            borderColor: colors[id],
-            backgroundColor: colors[id] + '22',
-            tension: 0.3,
-            fill: false,
-            pointRadius: 5,
+            borderColor: palette[i % palette.length],
+            backgroundColor: palette[i % palette.length] + '22',
+            tension: 0.3, fill: false, pointRadius: 5,
         }));
-
         new Chart(document.getElementById('chartTimeline'), {
             type: 'line',
             data: { datasets },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'top' } },
-                scales: {
-                    x: { type: 'category', grid: { display: false } },
-                    y: { beginAtZero: true, grid: { color: '#f1f5f9' } }
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { x: { type: 'category', grid: { display: false } }, y: { beginAtZero: true, grid: { color: '#f1f5f9' } } } }
         });
-    }
 
-    renderDashboard();
+        // --- Vehicle Table ---
+        const tbody = document.getElementById('dbTableBody');
+        if (fleet.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="no-data">ไม่มีข้อมูลรถในระบบ</td></tr>`;
+            return;
+        }
+        fleet.forEach(car => {
+            const lastLog     = logs.slice().reverse().find(l => l.carId === car.id);
+            const currentMile = lastLog ? parseFloat(lastLog.currentOdometer) : car.lastMile;
+            const baseMile    = Math.floor(car.lastMile / MAINTENANCE_INTERVAL) * MAINTENANCE_INTERVAL;
+            const pct         = ((currentMile - baseMile) / MAINTENANCE_INTERVAL) * 100;
+
+            let badge = '';
+            if (car.inRepair)   badge = '<span class="badge-repair">🔧 เข้าซ่อม</span>';
+            else if (pct >= 80) badge = '<span class="badge-warn">⚠️ ใกล้รอบซ่อม</span>';
+            else                badge = '<span class="badge-ok">✅ ปกติ</span>';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-weight:700;color:var(--primary);">${car.id}</td>
+                <td>${car.type}</td>
+                <td style="font-weight:600;">${currentMile.toLocaleString()} กม.</td>
+                <td>👤 ${lastLog ? lastLog.driverName : '—'}</td>
+                <td>${badge}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    };
 </script>
+
+<footer>
+    <span>© 2568 หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span> &nbsp;|&nbsp; Smart Fleet Analytics
+</footer>
 </body>
 </html>

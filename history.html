@@ -79,6 +79,9 @@
         mark { background: #fef08a; border-radius: 3px; padding: 0 2px; }
 
         /* Responsive */
+
+        footer { background: #0f172a; color: #64748b; text-align: center; padding: 18px; font-size: 13px; margin-top: 32px; }
+        footer span { color: #94a3b8; }
         @media (max-width: 600px) {
             .main-content { padding: 20px 12px; }
             .filter-bar { flex-direction: column; }
@@ -159,6 +162,7 @@
                     <th onclick="sortTable('distance')">ระยะทาง (กม.) <span class="sort-icon"></span></th>
                     <th onclick="sortTable('fuel')">น้ำมัน (ลิตร) <span class="sort-icon"></span></th>
                     <th onclick="sortTable('consumption')">กม./ลิตร <span class="sort-icon"></span></th>
+                    <th>หมายเหตุ</th>
                     <th>จัดการ</th>
                 </tr>
             </thead>
@@ -298,7 +302,7 @@
         tbody.innerHTML = '';
 
         if (filtered.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="9" class="no-data">❌ ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10" class="no-data">❌ ไม่พบข้อมูลที่ค้นหา</td></tr>`;
             return;
         }
 
@@ -399,5 +403,9 @@
     checkMaintenance();
     renderTable();
 </script>
+
+<footer>
+    <span>© 2568 หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span> &nbsp;|&nbsp; Smart Fleet Analytics
+</footer>
 </body>
 </html>

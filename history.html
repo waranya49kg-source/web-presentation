@@ -322,6 +322,7 @@
                 <td>${parseFloat(item.distance).toLocaleString()}</td>
                 <td>${item.fuel !== '—' ? item.fuel : '<span style="color:var(--text-muted)">—</span>'}</td>
                 <td class="consumption-cell ${isLow ? 'low' : ''}">${item.consumption} ${item.consumption !== '—' ? 'กม./ลิตร' : ''}</td>
+                <td style="font-size:13px;color:var(--text-muted);max-width:140px;">${item.remark || '—'}</td>
                 <td>
                     <a href="index.html?edit=${origIdx}" class="btn-action btn-edit">✏️ แก้ไข</a>
                     <button onclick="deleteLog(${origIdx})" class="btn-action btn-delete">🗑️</button>

@@ -6,200 +6,398 @@
     <title>Smart Fleet - ประวัติการวิ่งรถ</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --background: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --danger: #ef4444;
-            --success: #10b981;
+            --primary: #4f46e5; --background: #f8fafc; --card-bg: #ffffff;
+            --text-main: #0f172a; --text-muted: #64748b; --border: #e2e8f0;
+            --success: #10b981; --danger: #ef4444; --warning: #f59e0b;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text-main); margin: 0; padding: 0; }
-        .navbar { background-color: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--background); color: var(--text-main); margin: 0; padding: 0; }
+        .navbar { background: #0f172a; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; flex-wrap: wrap; gap: 10px; }
         .navbar-brand { font-size: 18px; font-weight: 700; }
-        .nav-links { display: flex; gap: 10px; }
+        .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
         .nav-link { color: #94a3b8; text-decoration: none; padding: 8px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
-        .nav-link:hover { color: white; background-color: #1e293b; }
-        .nav-link.active { color: white; background-color: var(--primary); }
-        
-        .main-content { padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px; }
-        h2 { font-size: 22px; font-weight: 600; margin: 0; }
-        
-        .btn-group { display: flex; gap: 10px; }
-        .btn { padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-excel { background-color: var(--success); color: white; }
-        .btn-excel:hover { background-color: #059669; }
-        
-        /* แก้ไข Syntax Error จาก #slate-200 เป็นสีที่ถูกต้อง */
-        .btn-clear { background-color: #e2e8f0; color: var(--text-main); }
-        .btn-clear:hover { background-color: #cbd5e1; }
-        
-        /* เพิ่มระบบ scrollbar กรณีเปิดบนแท็บเล็ต/มือถือ ป้องกันตารางล้นจอ */
-        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04); border: 1px solid var(--border); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; min-width: 900px; }
-        th { background-color: #f8fafc; padding: 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); }
-        td { padding: 16px; border-bottom: 1px solid var(--border); color: var(--text-main); vertical-align: middle; }
+        .nav-link:hover { color: white; background: #1e293b; }
+        .nav-link.active { color: white; background: var(--primary); }
+
+        .main-content { padding: 32px 20px; max-width: 1200px; margin: 0 auto; }
+
+        /* Header */
+        .header-box { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        h2 { font-size: 20px; font-weight: 700; margin: 0 0 4px 0; }
+        .subtitle { font-size: 13px; color: var(--text-muted); }
+
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn { padding: 10px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-excel { background: var(--success); color: white; }
+        .btn-excel:hover { background: #059669; }
+        .btn-clear { background: #e2e8f0; color: var(--text-main); }
+        .btn-clear:hover { background: #cbd5e1; }
+
+        /* ⚠️ Maintenance Alert Banner */
+        .maintenance-banner { background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: none; }
+        .maintenance-banner.has-alert { display: block; }
+        .maintenance-banner .banner-title { font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 8px; }
+        .alert-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .alert-chip { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #78350f; }
+        .alert-chip.danger { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+
+        /* Filter Bar */
+        .filter-bar { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 140px; }
+        .filter-group label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .filter-group input, .filter-group select {
+            padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px;
+            font-size: 13px; background: #fcfdfe; color: var(--text-main);
+        }
+        .filter-group input:focus, .filter-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        .btn-reset-filter { padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: white; color: var(--text-muted); white-space: nowrap; align-self: flex-end; }
+        .btn-reset-filter:hover { background: #f1f5f9; }
+        .result-count { font-size: 12px; color: var(--text-muted); align-self: flex-end; white-space: nowrap; }
+
+        /* Table */
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 8px rgba(15,23,42,0.04); border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; min-width: 860px; }
+        th { background: #f8fafc; padding: 14px 16px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; white-space: nowrap; }
+        th:hover { background: #eef2ff; color: var(--primary); }
+        th .sort-icon { margin-left: 4px; opacity: 0.4; font-size: 11px; }
+        th.sort-asc .sort-icon::after { content: '▲'; opacity: 1; }
+        th.sort-desc .sort-icon::after { content: '▼'; opacity: 1; }
+        td { padding: 13px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
         tr:last-child td { border-bottom: none; }
-        
-        .btn-action { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-block; margin-right: 4px; }
-        .btn-edit { background-color: #f59e0b; color: #0f172a; }
-        .btn-edit:hover { background-color: #d97706; }
-        .btn-delete { background-color: var(--danger); color: white; }
-        .btn-delete:hover { background-color: #dc2626; }
-        .no-data { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
+        tr:hover td { background: #fafbff; }
+
+        .consumption-cell { font-weight: 700; color: var(--primary); }
+        .consumption-cell.low { color: var(--danger); }
+        .btn-action { padding: 5px 11px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; margin-right: 4px; }
+        .btn-edit { background: #fef3c7; color: #92400e; }
+        .btn-edit:hover { background: #fde68a; }
+        .btn-delete { background: #fee2e2; color: #b91c1c; }
+        .btn-delete:hover { background: #fca5a5; }
+        .no-data { text-align: center; padding: 48px; color: var(--text-muted); }
+
+        /* Highlight search match */
+        mark { background: #fef08a; border-radius: 3px; padding: 0 2px; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .main-content { padding: 20px 12px; }
+            .filter-bar { flex-direction: column; }
+            .filter-group { min-width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
+<nav class="navbar">
     <div class="navbar-brand">📊 Smart Fleet Analytics</div>
     <div class="nav-links">
         <a href="index.html" class="nav-link">📝 บันทึกข้อมูลการวิ่งรถ</a>
-        <a href="history.html" class="nav-link">📋 ประวัติการวิ่งรถ</a>
-        <a href="database.html" class="nav-link">📊 Dashboard &amp; แจ้งซ่อมบำรุง</a>
+        <a href="history.html" class="nav-link active">📋 ประวัติแจ้งเตือนซ่อมบำรุง</a>
+        <a href="database.html" class="nav-link">🗃️ คลังข้อมูลยานพาหนะ</a>
         <a href="manage.html" class="nav-link">🚗 จัดการรถ</a>
         <a href="developer.html" class="nav-link">🧑‍💻 ผู้พัฒนาระบบ</a>
     </div>
 </nav>
 
-    <div class="main-content">
-        <div class="header-box">
-            <div>
-                <h2>📋 ประวัติการใช้งานรถและอัตราสิ้นเปลืองน้ำมัน</h2>
-                <span style="font-size: 13px; color: var(--text-muted); font-weight: 500;">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</span>
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-excel" onclick="exportToCSV()">📥 ดาวน์โหลดรายงาน (Excel/CSV)</button>
-                <button class="btn btn-clear" onclick="clearAllLogs()">🗑️ ล้างประวัติทั้งหมด</button>
-            </div>
-        </div>
+<div class="main-content">
 
-        <div class="table-container">
-            <table id="logTable">
-                <thead>
-                    <tr>
-                        <th>วันที่บันทึก</th>
-                        <th>ชื่อพนักงานขับรถ</th>
-                        <th>หมายเลขทะเบียนรถ</th>
-                        <th>ประเภทรถยนต์</th>
-                        <th>เลขไมล์ปัจจุบัน (กม.)</th>
-                        <th>ระยะทาง (กม.)</th>
-                        <th>น้ำมันที่ใช้ (ลิตร)</th>
-                        <th>อัตราสิ้นเปลือง (กม./ลิตร)</th>
-                        <th>จัดการข้อมูล</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    </tbody>
-            </table>
+    <div class="header-box">
+        <div>
+            <h2>📋 ประวัติการใช้งานรถและอัตราสิ้นเปลืองน้ำมัน</h2>
+            <div class="subtitle">หน่วยงานอำนวยความปลอดภัย แขวงทางหลวงชลบุรีที่ 2</div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-excel" onclick="exportToCSV()">📥 ดาวน์โหลด CSV</button>
+            <button class="btn btn-clear" onclick="clearAllLogs()">🗑️ ล้างประวัติทั้งหมด</button>
         </div>
     </div>
 
-    <script>
-        // === Seed ข้อมูลตัวอย่าง (รันครั้งเดียวตอนเปิดเว็บครั้งแรกในเบราว์เซอร์นี้) ===
-        (function seedDemoData() {
-            if (localStorage.getItem('fleetSeeded')) return; // เคย seed แล้ว ไม่ทำซ้ำ (เคารพการ "ล้างประวัติ" ของผู้ใช้)
+    <!-- ⚠️ แจ้งเตือนซ่อมบำรุง -->
+    <div class="maintenance-banner" id="maintenanceBanner">
+        <div class="banner-title">⚠️ แจ้งเตือน: รถใกล้ถึงรอบซ่อมบำรุง (ทุก 10,000 กม.)</div>
+        <div class="alert-chips" id="maintenanceChips"></div>
+    </div>
 
-            const seedFleet = [
-                { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
-                { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
-                { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
-            ];
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label>🔍 ค้นหา</label>
+            <input type="text" id="searchInput" placeholder="ชื่อคนขับ, ทะเบียน...">
+        </div>
+        <div class="filter-group">
+            <label>🚗 ทะเบียนรถ</label>
+            <select id="filterCar">
+                <option value="">ทั้งหมด</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>👤 คนขับ</label>
+            <select id="filterDriver">
+                <option value="">ทั้งหมด</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>📅 เดือน</label>
+            <select id="filterMonth">
+                <option value="">ทั้งหมด</option>
+            </select>
+        </div>
+        <button class="btn-reset-filter" onclick="resetFilters()">↺ รีเซ็ต</button>
+        <div class="result-count" id="resultCount"></div>
+    </div>
 
-            const seedLogs = [
-                { date: '11/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 296850, distance: 141, fuel: 12,   consumption: '11.75' },
-                { date: '17/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297005, distance: 155, fuel: 13,   consumption: '11.92' },
-                { date: '23/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '44-0680-18-0', carType: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', currentOdometer: 297190, distance: 185, fuel: 15.5, consumption: '11.94' },
+    <!-- Table -->
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th onclick="sortTable('date')">วันที่ <span class="sort-icon"></span></th>
+                    <th onclick="sortTable('driverName')">ชื่อพนักงานขับรถ <span class="sort-icon"></span></th>
+                    <th onclick="sortTable('carId')">หมายเลขทะเบียน <span class="sort-icon"></span></th>
+                    <th>ประเภทรถ</th>
+                    <th onclick="sortTable('currentOdometer')">เลขไมล์ (กม.) <span class="sort-icon"></span></th>
+                    <th onclick="sortTable('distance')">ระยะทาง (กม.) <span class="sort-icon"></span></th>
+                    <th onclick="sortTable('fuel')">น้ำมัน (ลิตร) <span class="sort-icon"></span></th>
+                    <th onclick="sortTable('consumption')">กม./ลิตร <span class="sort-icon"></span></th>
+                    <th>จัดการ</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
 
-                { date: '12/6/2569', driverName: 'นายเสกสันต์ รังกลาง',   carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168350, distance: 230, fuel: 28, consumption: '8.21' },
-                { date: '18/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168570, distance: 220, fuel: 27, consumption: '8.15' },
-                { date: '24/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '74-6283-22-3', carType: 'รถเครน', currentOdometer: 168800, distance: 230, fuel: 29, consumption: '7.93' },
+<script>
+    const MAINTENANCE_INTERVAL = 10000;
+    let sortKey = 'date';
+    let sortDir = 'desc';
+    let searchKeyword = '';
 
-                { date: '08/6/2569', driverName: 'นายชาญกิจ โชติกาญ',     carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192700, distance: 186, fuel: 31, consumption: '6.00' },
-                { date: '13/6/2569', driverName: 'นายเฉลิมพล เอี่ยมสะอาด', carId: '46-7126-20-7', carType: 'รถบรรทุก', currentOdometer: 192910, distance: 210, fuel: 33, consumption: '6.36' },
-            ];
+    const DEFAULT_FLEET = [
+        { id: '44-0680-18-0', type: 'รถกระบะตรวจการ (ออกตรวจหน้างาน)', lastMile: 296709, inRepair: false },
+        { id: '74-6283-22-3', type: 'รถเครน',                              lastMile: 168120, inRepair: false },
+        { id: '46-7126-20-7', type: 'รถบรรทุก',                            lastMile: 192514, inRepair: true  },
+    ];
 
-            localStorage.setItem('fleetMaster', JSON.stringify(seedFleet));
-            localStorage.setItem('fleetLogs', JSON.stringify(seedLogs));
-            localStorage.setItem('fleetSeeded', 'true');
-        })();
+    function getFleetMaster() {
+        const saved = localStorage.getItem('fleetMaster');
+        return saved ? JSON.parse(saved) : DEFAULT_FLEET;
+    }
 
-        window.onload = function() {
-            renderTable();
-        };
+    // ===== Maintenance Alert =====
+    function checkMaintenance() {
+        const logs  = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+        const fleet = getFleetMaster();
+        const chips = document.getElementById('maintenanceChips');
+        const banner = document.getElementById('maintenanceBanner');
+        chips.innerHTML = '';
+        let hasAlert = false;
 
-        function renderTable() {
-            const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = "";
+        fleet.forEach(car => {
+            if (car.inRepair) return;
+            const lastLog = logs.slice().reverse().find(l => l.carId === car.id);
+            const currentMile = lastLog ? parseFloat(lastLog.currentOdometer) : car.lastMile;
+            const baseMile = Math.floor(car.lastMile / MAINTENANCE_INTERVAL) * MAINTENANCE_INTERVAL;
+            const nextService = baseMile + MAINTENANCE_INTERVAL;
+            const remaining = nextService - currentMile;
+            const pct = ((currentMile - baseMile) / MAINTENANCE_INTERVAL) * 100;
 
-            if (fleetData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="no-data">❌ ยังไม่มีข้อมูลการบันทึกในระบบ</td></tr>`;
-                return;
+            if (pct >= 80) {
+                hasAlert = true;
+                const chip = document.createElement('div');
+                chip.className = 'alert-chip' + (remaining <= 0 ? ' danger' : '');
+                chip.innerText = remaining <= 0
+                    ? `🔴 ${car.id} — ถึงรอบซ่อมแล้ว!`
+                    : `🟡 ${car.id} — เหลืออีก ${remaining.toLocaleString()} กม.`;
+                chips.appendChild(chip);
             }
+        });
 
-            fleetData.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.date}</td>
-                    <td style="font-weight: 600;">${item.driverName || '-'}</td>
-                    <td>${item.carId}</td>
-                    <td>${item.carType}</td>
-                    <td>${parseFloat(item.currentOdometer).toLocaleString()}</td>
-                    <td>${item.distance}</td>
-                    <td>${item.fuel}</td>
-                    <td style="font-weight: bold; color: var(--primary);">${item.consumption} กม./ลิตร</td>
-                    <td>
-                        <a href="index.html?edit=${index}" class="btn-action btn-edit">✏️ แก้ไข</a>
-                        <button onclick="deleteLog(${index})" class="btn-action btn-delete">🗑️ ลบ</button>
-                    </td>
-                `;
-                tableBody.appendChild(tr);
-            });
+        banner.className = 'maintenance-banner' + (hasAlert ? ' has-alert' : '');
+    }
+
+    // ===== Filter Dropdowns =====
+    function populateFilters(data) {
+        const cars    = [...new Set(data.map(l => l.carId))].sort();
+        const drivers = [...new Set(data.map(l => l.driverName || '—'))].sort();
+        const months  = [...new Set(data.map(l => l.date ? l.date.substring(0, l.date.lastIndexOf('/') === -1 ? 100 : l.date.lastIndexOf('/')) : ''))].filter(Boolean);
+
+        const carSel    = document.getElementById('filterCar');
+        const driverSel = document.getElementById('filterDriver');
+        const monthSel  = document.getElementById('filterMonth');
+
+        // เก็บค่าที่เลือกไว้ก่อน
+        const prevCar    = carSel.value;
+        const prevDriver = driverSel.value;
+        const prevMonth  = monthSel.value;
+
+        carSel.innerHTML    = '<option value="">ทั้งหมด</option>';
+        driverSel.innerHTML = '<option value="">ทั้งหมด</option>';
+        monthSel.innerHTML  = '<option value="">ทั้งหมด</option>';
+
+        cars.forEach(c    => carSel.innerHTML    += `<option value="${c}" ${c===prevCar?'selected':''}>${c}</option>`);
+        drivers.forEach(d => driverSel.innerHTML += `<option value="${d}" ${d===prevDriver?'selected':''}>${d}</option>`);
+
+        // Month options จากข้อมูลจริง
+        const uniqueMonths = [...new Set(data.map(l => {
+            if (!l.date) return '';
+            const parts = l.date.split('/');
+            return parts.length >= 3 ? `${parts[1]}/${parts[2]}` : '';
+        }))].filter(Boolean).sort();
+        uniqueMonths.forEach(m => monthSel.innerHTML += `<option value="${m}" ${m===prevMonth?'selected':''}>${m}</option>`);
+    }
+
+    // ===== Highlight =====
+    function highlight(text, keyword) {
+        if (!keyword) return text;
+        const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return String(text).replace(new RegExp(escaped, 'gi'), m => `<mark>${m}</mark>`);
+    }
+
+    // ===== Render Table =====
+    function renderTable() {
+        const allData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+        populateFilters(allData);
+
+        const keyword    = document.getElementById('searchInput').value.trim().toLowerCase();
+        const filterCar  = document.getElementById('filterCar').value;
+        const filterDrv  = document.getElementById('filterDriver').value;
+        const filterMon  = document.getElementById('filterMonth').value;
+
+        searchKeyword = keyword;
+
+        let filtered = allData.filter(item => {
+            const matchSearch = !keyword ||
+                (item.driverName || '').toLowerCase().includes(keyword) ||
+                (item.carId || '').toLowerCase().includes(keyword) ||
+                (item.carType || '').toLowerCase().includes(keyword) ||
+                (item.date || '').includes(keyword);
+            const matchCar    = !filterCar || item.carId === filterCar;
+            const matchDriver = !filterDrv || item.driverName === filterDrv;
+            const matchMonth  = !filterMon || (() => {
+                if (!item.date) return false;
+                const parts = item.date.split('/');
+                return parts.length >= 3 && `${parts[1]}/${parts[2]}` === filterMon;
+            })();
+            return matchSearch && matchCar && matchDriver && matchMonth;
+        });
+
+        // Sort
+        filtered.sort((a, b) => {
+            let va = a[sortKey] ?? '';
+            let vb = b[sortKey] ?? '';
+            if (!isNaN(parseFloat(va)) && !isNaN(parseFloat(vb))) { va = parseFloat(va); vb = parseFloat(vb); }
+            else { va = String(va); vb = String(vb); }
+            return sortDir === 'asc' ? (va > vb ? 1 : -1) : (va < vb ? 1 : -1);
+        });
+
+        document.getElementById('resultCount').innerText =
+            filtered.length !== allData.length ? `แสดง ${filtered.length} / ${allData.length} รายการ` : `${allData.length} รายการ`;
+
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" class="no-data">❌ ไม่พบข้อมูลที่ค้นหา</td></tr>`;
+            return;
         }
 
-        function deleteLog(index) {
-            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบประวัติแถวนี้?")) {
-                let fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-                fleetData.splice(index, 1);
-                localStorage.setItem('fleetLogs', JSON.stringify(fleetData));
-                renderTable();
-            }
+        // หา index ใน allData สำหรับ edit/delete
+        filtered.forEach(item => {
+            const origIdx = allData.indexOf(item);
+            const cVal = parseFloat(item.consumption);
+            const isLow = !isNaN(cVal) && cVal < 5;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${highlight(item.date, searchKeyword)}</td>
+                <td style="font-weight:600;">${highlight(item.driverName || '—', searchKeyword)}</td>
+                <td>${highlight(item.carId, searchKeyword)}</td>
+                <td style="color:var(--text-muted);font-size:13px;">${highlight(item.carType, searchKeyword)}</td>
+                <td>${parseFloat(item.currentOdometer).toLocaleString()}</td>
+                <td>${parseFloat(item.distance).toLocaleString()}</td>
+                <td>${item.fuel !== '—' ? item.fuel : '<span style="color:var(--text-muted)">—</span>'}</td>
+                <td class="consumption-cell ${isLow ? 'low' : ''}">${item.consumption} ${item.consumption !== '—' ? 'กม./ลิตร' : ''}</td>
+                <td>
+                    <a href="index.html?edit=${origIdx}" class="btn-action btn-edit">✏️ แก้ไข</a>
+                    <button onclick="deleteLog(${origIdx})" class="btn-action btn-delete">🗑️</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // ===== Sort =====
+    function sortTable(key) {
+        if (sortKey === key) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        else { sortKey = key; sortDir = 'asc'; }
+
+        document.querySelectorAll('th').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            const span = th.querySelector('.sort-icon');
+            if (span) span.innerHTML = '';
+        });
+        const ths = document.querySelectorAll('th');
+        const keyMap = { date:0, driverName:1, carId:2, currentOdometer:4, distance:5, fuel:6, consumption:7 };
+        if (keyMap[key] !== undefined) {
+            ths[keyMap[key]].classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+            const span = ths[keyMap[key]].querySelector('.sort-icon');
+            if (span) span.innerHTML = sortDir === 'asc' ? ' ▲' : ' ▼';
         }
+        renderTable();
+    }
 
-        function clearAllLogs() {
-            if (confirm("⚠️ เตือนภัย! คุณต้องการล้างข้อมูลประวัติทั้งหมดใช่หรือไม่? ข้อมูลจะหายไปถาวร")) {
-                localStorage.removeItem('fleetLogs');
-                renderTable();
-            }
-        }
+    // ===== Reset =====
+    function resetFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('filterCar').value = '';
+        document.getElementById('filterDriver').value = '';
+        document.getElementById('filterMonth').value = '';
+        renderTable();
+    }
 
-        function exportToCSV() {
-            const fleetData = JSON.parse(localStorage.getItem('fleetLogs')) || [];
-            if (fleetData.length === 0) {
-                alert("ไม่มีข้อมูลสำหรับการดาวน์โหลด");
-                return;
-            }
+    // ===== Delete =====
+    function deleteLog(index) {
+        if (!confirm('ต้องการลบรายการนี้?')) return;
+        let data = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+        data.splice(index, 1);
+        localStorage.setItem('fleetLogs', JSON.stringify(data));
+        renderTable();
+        checkMaintenance();
+    }
 
-            let csvContent = "\uFEFF"; 
-            csvContent += "วันที่บันทึก,ชื่อพนักงานขับรถ,หมายเลขทะเบียนรถ,ประเภทรถยนต์,เลขไมล์ปัจจุบัน(กม.),ระยะทาง(กม.),น้ำมันที่ใช้(ลิตร),อัตราสิ้นเปลือง(กม./ลิตร)\n";
+    function clearAllLogs() {
+        if (!confirm('⚠️ ล้างข้อมูลประวัติทั้งหมด?')) return;
+        localStorage.removeItem('fleetLogs');
+        renderTable();
+        checkMaintenance();
+    }
 
-            fleetData.forEach(item => {
-                csvContent += `"${item.date}","${item.driverName || '-'}","${item.carId}","${item.carType}",${item.currentOdometer},${item.distance},${item.fuel},${item.consumption}\n`;
-            });
+    // ===== Export CSV =====
+    function exportToCSV() {
+        const data = JSON.parse(localStorage.getItem('fleetLogs')) || [];
+        if (data.length === 0) { alert('ไม่มีข้อมูล'); return; }
+        let csv = '\uFEFF';
+        csv += 'วันที่,ชื่อพนักงาน,ทะเบียน,ประเภท,เลขไมล์,ระยะทาง,น้ำมัน(ลิตร),กม./ลิตร\n';
+        data.forEach(i => {
+            csv += `"${i.date}","${i.driverName||'—'}","${i.carId}","${i.carType}",${i.currentOdometer},${i.distance},${i.fuel},${i.consumption}\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'รายงานการใช้รถ_แขวงทางหลวงชลบุรี2.csv';
+        a.click();
+    }
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", "รายงานการใช้รถ_หน่วยงานอำนวยความปลอดภัย.csv");
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
+    // ===== Event Listeners =====
+    document.getElementById('searchInput').addEventListener('input', renderTable);
+    document.getElementById('filterCar').addEventListener('change', renderTable);
+    document.getElementById('filterDriver').addEventListener('change', renderTable);
+    document.getElementById('filterMonth').addEventListener('change', renderTable);
+
+    // ===== Init =====
+    checkMaintenance();
+    renderTable();
+</script>
 </body>
 </html>
